@@ -30,4 +30,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="gta2.lua" />
+  </ItemGroup>
 </Project>
