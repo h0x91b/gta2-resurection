@@ -818,27 +818,40 @@ local health = 10
 
 -- static GetPedById fnGetPedByID = (GetPedById)0x0043ae10;
 local fnGetPedByID = ffi.cast('GetPedById', 0x0043ae10)
+local firstRun = true
 
 function gameTick(dt)
+    if firstRun then
+        firstRun = false
+        DetourAttach(
+            function ( pedId )
+                print("GetPedById")
+	            print("GetPedById(".. tostring(pedId) ..")")
+            end,
+            0x0043ae10, 
+            6,
+            1
+        )
+    end
 	health = health + 10
 	if health > 100 then
 		health = 10
 	end
-	print("tick1", dt, health)
-	local ped = GetPedById(1)
-	print ("ped", ped)
-
-	local p = ffi.cast('struct Ped*', ped) -- преобразовываем указатель одного типа в указатель другого типа
-	print("health: ", p.health)
-	if p.car ~= nil then
-		print("car: id " , p.car.id, p.car.type)
-		p.car.type = 53
-	end
-
-	SetPedHealthById(1, health)
-
-    local myPed = fnGetPedByID(1)
-    print("fnGetPedByID(1)", inspect(myPed))
-
-    print("My ped health " .. myPed.health)
+	-- print("tick1", dt, health)
+	-- local ped = GetPedById(1)
+	-- print ("ped", ped)
+    -- 
+	-- local p = ffi.cast('struct Ped*', ped)
+	-- print("health: ", p.health)
+	-- if p.car ~= nil then
+	-- 	print("car: id " , p.car.id, p.car.type)
+	-- 	p.car.type = 53
+	-- end
+    -- 
+	-- SetPedHealthById(1, health)
+    -- 
+    -- local myPed = fnGetPedByID(1)
+    -- print("fnGetPedByID(1)", inspect(myPed))
+    -- 
+    -- print("My ped health " .. myPed.health)
 end
