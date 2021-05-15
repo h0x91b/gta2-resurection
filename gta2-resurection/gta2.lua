@@ -1,4 +1,5 @@
 local ffi = require("ffi")
+
 ffi.cdef[[
 typedef unsigned char   undefined;
 typedef unsigned char    byte;
