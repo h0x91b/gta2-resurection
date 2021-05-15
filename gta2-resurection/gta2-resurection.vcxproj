@@ -107,12 +107,17 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>copy /Y "D:\src\gta2-resurection\gta2-resurection\*.lua" "D:\Games\GTA2\"</Command>
+      <Outputs>non-existen-file</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>copy /Y "D:\src\gta2-resurection\gta2-resurection\gta2.lua" "D:\Games\GTA2\gta2.lua"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -133,12 +138,17 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <CustomBuildStep>
-      <Command>
-      </Command>
+      <Command>copy /Y "D:\src\gta2-resurection\gta2-resurection\*.lua" "D:\Games\GTA2\"</Command>
+      <Outputs>non-existen-file</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>copy /Y "D:\src\gta2-resurection\gta2-resurection\gta2.lua" "D:\Games\GTA2\gta2.lua"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

@@ -25,6 +25,7 @@ lua_State* L;
 typedef Ped* (__stdcall GetPedById)(int);
 static GetPedById* fnGetPedByID = (GetPedById*)0x0043ae10;
 #pragma endregion
+ 
 
 // 0x0044b2c0 - 7 bytes
 typedef void (__fastcall AddMoney)(void *_this, DWORD edx, int money);
@@ -114,7 +115,11 @@ void lGameTick() {
     DWORD currentTicks = GetTickCount();
     lua_getglobal(L, "gameTick");// получаем из lua функцию pri.
     lua_pushnumber(L, (float)(currentTicks-lastTicks)/1000);// отправляем в стек число.
-    lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
+    auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
+
+    if (x != LUA_OK) {
+        printf("Lua error: %s\n", lua_tostring(L, -1));
+    }
 
     lastTicks = currentTicks;
 }
