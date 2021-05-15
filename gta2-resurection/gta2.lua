@@ -1,5 +1,5 @@
 local ffi = require("ffi")
-
+ 
 ffi.cdef[[
 typedef unsigned char   undefined;
 typedef unsigned char    byte;
@@ -804,13 +804,20 @@ typedef struct Ped {
     undefined field_0x28b;
     int field_0x28c;
 } __attribute__ ((packed));
+
+typedef Ped* (__stdcall *GetPedById)(int);
 ]]
+
+local inspect = require 'inspect'
 
 print "aaaa"
 
 print("Hello world", "foo", "BAR", 3.14, false)
 
 local health = 10
+
+-- static GetPedById fnGetPedByID = (GetPedById)0x0043ae10;
+local fnGetPedByID = ffi.cast('GetPedById', 0x0043ae10)
 
 function gameTick(dt)
 	health = health + 10
@@ -829,5 +836,9 @@ function gameTick(dt)
 	end
 
 	SetPedHealthById(1, health)
-	
+
+    local myPed = fnGetPedByID(1)
+    print("fnGetPedByID(1)", inspect(myPed))
+
+    print("My ped health " .. myPed.health)
 end
