@@ -2,45 +2,13 @@
 #include "pch.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <lua.hpp>
 #include <detours.h>
+#include "defines.h"
+#include "gta-helper.h"
+#include "dxhook.h"
+#include "lua.h"
 
-#pragma comment(lib, "lua51.lib")
 #pragma comment(lib, "detours.lib")
-
-#pragma pack(push)  /* push current alignment to stack */
-#pragma pack(1)     /* set alignment to 1 byte boundary */
-#include "gta2.h"
-#pragma pack(pop)   /* restore original alignment from stack */
-
-#pragma region asserts
-static_assert(sizeof(Ped) == 0x290, "Wrong size of Car struct");
-static_assert(offsetof(struct Ped, health) == 0x216, "Wrong offset of health in Ped struct");
-#pragma endregion
-
-#define LUA_OK 0
-
-#define cast(type, x) (type*)*(DWORD*)x
-
-// lua examples https://pastebin.com/8f9UH56W
-lua_State* L;
-
-#pragma region gta
-Game* game = cast(Game, 0x005eb4fc);
-
-typedef Ped* (__stdcall GetPedById)(int);
-static GetPedById* fnGetPedByID = (GetPedById*)0x0043ae10;
-
-// 0045c1f0 - void __fastcall GameTick(Game *game)
-#pragma endregion
-
-#define thisCallHook(fnName, addr, thisType, retType, ...) \
-    typedef retType (__fastcall fnName)(thisType _this, DWORD _edx, __VA_ARGS__); \
-    fnName* real##fnName = (fnName*)addr; \
-    retType __fastcall _##fnName(thisType _this, DWORD _edx, __VA_ARGS__)
-
-#define Attach(fnName) DetourAttach(&(PVOID&)real##fnName, _##fnName);
-#define Dettach(fnName) DetourDetach(&(PVOID&)real##fnName, _##fnName);
 
 thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
     realGameTick(_this, _edx);
@@ -58,6 +26,7 @@ thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
     lastTicks = currentTicks;
 }
 
+
 // 0x0044b2c0 - 7 bytes
 typedef void (__fastcall AddMoney)(void *_this, DWORD edx, int money);
 AddMoney* oAddMoney = 0;
@@ -65,45 +34,6 @@ void __fastcall addMoney(void* _this, DWORD _edx, int money) {
     printf("addMoney %i!\n", money);
 
     oAddMoney(_this, _edx, money * 100);
-}
-
-int lPrint(lua_State* L) {
-    int narg = lua_gettop(L);
-    double n;
-    printf("[LUA:%d]", narg);
-    for (auto i = 0; i < narg; i++) {
-        if (LUA_TNUMBER == lua_type(L, i + 1)) {
-            n = lua_tonumber(L, i + 1);
-            if (n == (int)n) {
-                printf(" 0x%X(%i)", (int)n, (int)n);
-            }
-            else {
-                printf(" %f", n);
-            }
-        }
-        else {
-            printf(" %s", lua_tostring(L, i + 1));
-        }
-    }
-    printf("\n");
-    return 0;
-};
-
-void initLua() {
-    L = lua_open();
-
-    // Load the libraries
-    luaL_openlibs(L);
-
-    lua_register(L, "print", lPrint);
-    int x = luaL_dofile(L, "gta2.lua");// Загружает и запускает заданный файл. файл в которым все происходит.
-
-    if (x != LUA_OK) {
-        printf("Lua error: %s\n", lua_tostring(L, -1));
-    }
-    else {
-        printf("Lua was ok\n");
-    }
 }
 
 DWORD WINAPI MainThread(HMODULE hModule) {
@@ -146,7 +76,6 @@ DWORD WINAPI MainThread(HMODULE hModule) {
         height,
         true
     );
-    //GetNextWindow()
 
     DetourRestoreAfterWith();
 
@@ -156,6 +85,8 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     Attach(GameTick);
     DetourTransactionCommit();
 	printf("Detour complete\n");
+
+    HookD3D();
 
     initLua();
 
