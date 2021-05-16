@@ -185,11 +185,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="D3D_VMT_Indices.h" />
+    <ClInclude Include="defines.h" />
+    <ClInclude Include="dxhook.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="gta-helper.h" />
+    <ClInclude Include="lua.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="dxhook.cpp" />
+    <ClCompile Include="lua.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
