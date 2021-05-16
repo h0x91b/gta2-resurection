@@ -805,6 +805,32 @@ typedef struct Ped {
     int field_0x28c;
 } __attribute__ ((packed));
 
+struct Game {
+    uint gameStatus; /* 1 - run, 2 - pause game */
+    struct S4 * S4;
+    undefined field_0x8;
+    undefined field_0x9;
+    undefined field_0xa;
+    undefined field_0xb;
+    undefined field_0xc;
+    undefined field_0xd;
+    undefined field_0xe;
+    undefined field_0xf;
+    undefined field_0x10;
+    undefined field_0x11;
+    undefined field_0x12;
+    undefined field_0x13;
+    undefined field_0x14;
+    undefined field_0x15;
+    undefined field_0x16;
+    undefined field_0x17;
+    undefined field_0x18;
+    undefined field_0x19;
+    undefined field_0x1a;
+    undefined field_0x1b;
+    struct S3 * s3;
+} __attribute__ ((packed));
+
 typedef Ped* (__stdcall *GetPedById)(int);
 ]]
 
@@ -818,43 +844,30 @@ local health = 10
 
 -- static GetPedById fnGetPedByID = (GetPedById)0x0043ae10;
 local fnGetPedByID = ffi.cast('GetPedById', 0x0043ae10)
-local firstRun = true
-
-function GetPedById( pedId )
-    pprint("GetPedById")
-	pprint("GetPedById(".. tostring(pedId) ..")")
-end
-
-DetourAttach(
-    "GetPedById",
-    0x0043ae10, 
-    6,
-    1
-)
+local pGame = nil
 
 function gameTick(dt)
-    if firstRun then
-        firstRun = false
+    local p = ffi.cast('int*', 0x005eb4fc)
+    if p[0] == 0 then
+        return
     end
+
+    pGame = ffi.cast('struct Game*', 0x005eb4fc)
+
 	health = health + 10
 	if health > 100 then
 		health = 10
 	end
 	pprint("tick1", dt, health)
-	-- local ped = GetPedById(1)
-	-- print ("ped", ped)
-    -- 
-	-- local p = ffi.cast('struct Ped*', ped)
-	-- print("health: ", p.health)
-	-- if p.car ~= nil then
-	-- 	print("car: id " , p.car.id, p.car.type)
-	-- 	p.car.type = 53
-	-- end
-    -- 
-	-- SetPedHealthById(1, health)
-    -- 
-    -- local myPed = fnGetPedByID(1)
-    -- print("fnGetPedByID(1)", inspect(myPed))
-    -- 
-    -- print("My ped health " .. myPed.health)
+    local p = fnGetPedByID(1)
+    if p == nil then
+        return
+    end
+	local ped = ffi.cast('struct Ped*', p)
+    ped.health = health
+	pprint("health: ", ped.health)
+	if ped.car ~= nil then
+		print("car: id ", ped.car.id, ped.car.type)
+		ped.car.type = 53
+	end
 end
