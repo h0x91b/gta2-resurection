@@ -810,9 +810,9 @@ typedef Ped* (__stdcall *GetPedById)(int);
 
 local inspect = require 'inspect'
 
-print "aaaa"
+pprint "aaaa"
 
-print("Hello world", "foo", "BAR", 3.14, false)
+pprint("Hello world", "foo", "BAR", 3.14, false)
 
 local health = 10
 
@@ -820,24 +820,27 @@ local health = 10
 local fnGetPedByID = ffi.cast('GetPedById', 0x0043ae10)
 local firstRun = true
 
+function GetPedById( pedId )
+    pprint("GetPedById")
+	pprint("GetPedById(".. tostring(pedId) ..")")
+end
+
+DetourAttach(
+    "GetPedById",
+    0x0043ae10, 
+    6,
+    1
+)
+
 function gameTick(dt)
     if firstRun then
         firstRun = false
-        DetourAttach(
-            function ( pedId )
-                print("GetPedById")
-	            print("GetPedById(".. tostring(pedId) ..")")
-            end,
-            0x0043ae10, 
-            6,
-            1
-        )
     end
 	health = health + 10
 	if health > 100 then
 		health = 10
 	end
-	-- print("tick1", dt, health)
+	pprint("tick1", dt, health)
 	-- local ped = GetPedById(1)
 	-- print ("ped", ped)
     -- 

@@ -74,7 +74,7 @@ struct SDetour {
     void* originalFn = nullptr;
     void* tramplineInFn = nullptr; // from originalFn to our StandardDetourFn
     void* tramplineOutFn = nullptr;
-    int hookFn = 0; // index in lua ref registry
+    char* hookFn = nullptr; // global hook function name
     size_t opcodeBytes = 5;
     size_t numArgs = 0;
 };
@@ -88,7 +88,11 @@ void __declspec(naked) StandardDetourFn() {
     static int b = s->numArgs * 4;
     // call lua
 
-    lua_rawgeti(L, LUA_REGISTRYINDEX, s->hookFn);
+    //lua_rawgeti(L, LUA_REGISTRYINDEX, s->hookFn);
+    lua_getglobal(L, s->hookFn);
+    if (!lua_isfunction(L, 1)) {
+        printf("failed to get hookFn\n");
+    }
     static DWORD *_esp;
     static DWORD arg;
 
@@ -127,18 +131,17 @@ int lDetourAttach(lua_State* L) {
 
     auto s = (SDetour*)malloc(sizeof(SDetour));
     
+    const char *hookFn = lua_tostring(L, 1);
+    auto hookFnLen = strlen(hookFn);
+    s->hookFn = (char*)malloc(hookFnLen+1);
+    strcpy_s(s->hookFn, hookFnLen+1, hookFn);
     auto originalFn = (void*)(DWORD)lua_tonumber(L, 2);
 
     auto opcodeBytes = (size_t)lua_tonumber(L, 3);
     auto numArgs = (size_t)lua_tonumber(L, 4);
 
-    lua_pop(L, 3);
-    if (!lua_isfunction(L, 1)) {
-        printf("Second argument must be a function\n");
-        return 0;
-    }
     //auto hookFn = (void*)(DWORD)lua_tonumber(L, -1);
-    auto hookFn = luaL_ref(L, LUA_REGISTRYINDEX);
+    //auto hookFn = luaL_ref(L, LUA_REGISTRYINDEX);
     // lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
 
     char* tramplineInFn = (char*)malloc(5 + 5);
@@ -184,7 +187,6 @@ int lDetourAttach(lua_State* L) {
     s->originalFn = originalFn;
     s->tramplineInFn = tramplineInFn;
     s->tramplineOutFn = tramplineOutFn;
-    s->hookFn = hookFn;
     s->opcodeBytes = opcodeBytes;
     s->numArgs = numArgs;
 
@@ -248,13 +250,13 @@ int lPrint(lua_State* L) {
 void lGameTick() {
     static DWORD lastTicks = GetTickCount();
     DWORD currentTicks = GetTickCount();
-    lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
-    lua_pushnumber(L, (float)(currentTicks-lastTicks)/1000);// отправляем в стек число.
-    auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
+    //lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
+    //lua_pushnumber(L, (float)(currentTicks-lastTicks)/1000);// отправляем в стек число.
+    //auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
 
-    if (x != LUA_OK) {
-        printf("Lua error: %s\n", lua_tostring(L, -1));
-    }
+    //if (x != LUA_OK) {
+    //    printf("Lua error: %s\n", lua_tostring(L, -1));
+    //}
 
     lastTicks = currentTicks;
 }
@@ -265,7 +267,7 @@ void initLua() {
     // Load the libraries
     luaL_openlibs(L);
 
-    lua_register(L, "print", lPrint);
+    lua_register(L, "pprint", lPrint);
     lua_register(L, "SetPedHealthById", lSetPedHealthById);
     lua_register(L, "GetPedById", lGetPedById);
     lua_register(L, "DetourAttach", lDetourAttach);
