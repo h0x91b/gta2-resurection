@@ -30,7 +30,33 @@ Game* game = cast(Game, 0x005eb4fc);
 
 typedef Ped* (__stdcall GetPedById)(int);
 static GetPedById* fnGetPedByID = (GetPedById*)0x0043ae10;
+
+// 0045c1f0 - void __fastcall GameTick(Game *game)
 #pragma endregion
+
+#define thisCallHook(fnName, addr, thisType, retType, ...) \
+    typedef retType (__fastcall fnName)(thisType _this, DWORD _edx, __VA_ARGS__); \
+    fnName* real##fnName = (fnName*)addr; \
+    retType __fastcall _##fnName(thisType _this, DWORD _edx, __VA_ARGS__)
+
+#define Attach(fnName) DetourAttach(&(PVOID&)real##fnName, _##fnName);
+#define Dettach(fnName) DetourDetach(&(PVOID&)real##fnName, _##fnName);
+
+thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
+    realGameTick(_this, _edx);
+
+    static DWORD lastTicks = GetTickCount();
+    DWORD currentTicks = GetTickCount();
+    lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
+    lua_pushnumber(L, (float)(currentTicks - lastTicks) / 1000);// отправляем в стек число.
+    auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
+
+    if (x != LUA_OK) {
+        printf("Lua error: %s\n", lua_tostring(L, -1));
+    }
+
+    lastTicks = currentTicks;
+}
 
 // 0x0044b2c0 - 7 bytes
 typedef void (__fastcall AddMoney)(void *_this, DWORD edx, int money);
@@ -62,20 +88,6 @@ int lPrint(lua_State* L) {
     printf("\n");
     return 0;
 };
-
-void lGameTick() {
-    static DWORD lastTicks = GetTickCount();
-    DWORD currentTicks = GetTickCount();
-    lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
-    lua_pushnumber(L, (float)(currentTicks-lastTicks)/1000);// отправляем в стек число.
-    auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
-
-    if (x != LUA_OK) {
-        printf("Lua error: %s\n", lua_tostring(L, -1));
-    }
-
-    lastTicks = currentTicks;
-}
 
 void initLua() {
     L = lua_open();
@@ -141,6 +153,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
     // DetourAttach(&(PVOID&)TrueSleep, TimedSleep);
+    Attach(GameTick);
     DetourTransactionCommit();
 	printf("Detour complete\n");
 
@@ -148,7 +161,6 @@ DWORD WINAPI MainThread(HMODULE hModule) {
 
     while (!GetAsyncKeyState(VK_F2)) {
         // our code
-        lGameTick();
         if (GetAsyncKeyState(VK_F1)) {
             lua_close(L);
             initLua();
@@ -160,6 +172,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
     //DetourDetach(&(PVOID&)TrueSleep, TimedSleep);
+    Dettach(GameTick);
     DetourTransactionCommit();
     printf("Dettach and shutdown everything\n");
 

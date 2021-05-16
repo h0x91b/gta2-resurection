@@ -856,13 +856,13 @@ function gameTick(dt)
 	if health > 100 then
 		health = 10
 	end
-	print("tick1", dt, health)
+	-- print("tick1", dt, health)
     local p = fnGetPedByID(1)
     if p == nil then
         return
     end
 	local ped = ffi.cast('struct Ped*', p)
-    ped.health = health
+    ped.health = 100
 	print("health: ", ped.health)
 	if ped.car ~= nil then
 		print("car: id ", ped.car.id, ped.car.type)
