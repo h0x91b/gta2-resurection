@@ -100,12 +100,41 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     AllocConsole();
     FILE* fDummy;
     freopen_s(&fDummy, "CONOUT$", "w", stdout);
-
     printf("Console window activated, press HOME to activate detour\n");
 
     while (!GetAsyncKeyState(VK_HOME)) {
         Sleep(50);
     }
+
+    // move windows
+    RECT rect;
+    auto hwnd = FindWindowA("WinMain", "GTA2");
+    GetWindowRect(hwnd, &rect);
+    auto screenX = GetSystemMetrics(SM_CXSCREEN);
+    auto screenY = GetSystemMetrics(SM_CYSCREEN);
+    auto width = rect.right - rect.left;
+    auto height = rect.bottom - rect.top;
+    MoveWindow(hwnd,
+        screenX - width,
+        0,
+        width,
+        height,
+        true
+    );
+
+    hwnd = FindWindowA("ConsoleWindowClass", 0);
+
+    GetWindowRect(hwnd, &rect);
+    width = rect.right - rect.left;
+    height = rect.bottom - rect.top;
+    MoveWindow(hwnd,
+        screenX - width,
+        screenY - height,
+        width,
+        height,
+        true
+    );
+    //GetNextWindow()
 
     DetourRestoreAfterWith();
 
