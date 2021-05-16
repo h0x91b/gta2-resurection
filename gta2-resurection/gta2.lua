@@ -836,9 +836,7 @@ typedef Ped* (__stdcall *GetPedById)(int);
 
 local inspect = require 'inspect'
 
-pprint "aaaa"
-
-pprint("Hello world", "foo", "BAR", 3.14, false)
+print("Hello world", "foo", "BAR", 42, 3.14, false)
 
 local health = 10
 
@@ -858,14 +856,14 @@ function gameTick(dt)
 	if health > 100 then
 		health = 10
 	end
-	pprint("tick1", dt, health)
+	print("tick1", dt, health)
     local p = fnGetPedByID(1)
     if p == nil then
         return
     end
 	local ped = ffi.cast('struct Ped*', p)
     ped.health = health
-	pprint("health: ", ped.health)
+	print("health: ", ped.health)
 	if ped.car ~= nil then
 		print("car: id ", ped.car.id, ped.car.type)
 		ped.car.type = 53

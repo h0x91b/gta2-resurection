@@ -83,7 +83,7 @@ void initLua() {
     // Load the libraries
     luaL_openlibs(L);
 
-    lua_register(L, "pprint", lPrint);
+    lua_register(L, "print", lPrint);
     int x = luaL_dofile(L, "gta2.lua");// Загружает и запускает заданный файл. файл в которым все происходит.
 
     if (x != LUA_OK) {
