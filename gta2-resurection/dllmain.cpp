@@ -7,6 +7,7 @@
 #include "gta-helper.h"
 #include "dxhook.h"
 #include "lua.h"
+#include "ui.h"
 
 #pragma comment(lib, "detours.lib")
 
@@ -84,18 +85,33 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     // DetourAttach(&(PVOID&)TrueSleep, TimedSleep);
     Attach(GameTick);
     DetourTransactionCommit();
-	printf("Detour complete\n");
-
+	
+    printf("DetourTransactionCommit done\n");
+    Sleep(100);
     HookD3D();
-
+    printf("HookD3D done\n");
+    Sleep(100);
     initLua();
+    printf("initLua done\n");
+    Sleep(100);
+    hwnd = FindWindowA("WinMain", "GTA2");
+    printf("hwnd is found %X\n", hwnd);
+    originalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)_wndProc);
+    printf("SetWindowLongPtr done\n");
 
+    int frames = 0;
     while (!GetAsyncKeyState(VK_F2)) {
         // our code
         if (GetAsyncKeyState(VK_F1)) {
             lua_close(L);
             initLua();
             Sleep(1000);
+        }
+        hwnd = FindWindowA("WinMain", "GTA2");
+        auto fn = GetWindowLongPtr(hwnd, GWLP_WNDPROC);
+        if (fn != (LONG_PTR)_wndProc) {
+            printf("Wrong wndproc, resetup it\n");
+            originalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)_wndProc);
         }
         Sleep(100);
     }
@@ -105,6 +121,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     //DetourDetach(&(PVOID&)TrueSleep, TimedSleep);
     Dettach(GameTick);
     DetourTransactionCommit();
+    SetWindowLongA(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(originalWndProc));
     printf("Dettach and shutdown everything\n");
 
     // Close lua

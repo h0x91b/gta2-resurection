@@ -1,7 +1,5 @@
 #pragma once
 
-#define cast(type, x) (type*)*(DWORD*)x
-
 #pragma pack(push)  /* push current alignment to stack */
 #pragma pack(1)     /* set alignment to 1 byte boundary */
 #include "gta2.h"
