@@ -2,6 +2,8 @@
 #include "ui.h"
 #include <stdio.h>
 #include "defines.h"
+#include "auto.h"
+#include "gta-helper.h"
 
 ID3D11DeviceContext* pDeviceContext;
 ID3D11RenderTargetView* mainRenderTargetView;
@@ -28,10 +30,10 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
 
     pSwapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
     pDevice->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
-    pBackBuffer->Release();
 }
 
 bool show_demo_window = true;
+bool show_demo_window2 = true;
 
 void renderUI() {
     ImGui_ImplDX11_NewFrame();
@@ -40,6 +42,27 @@ void renderUI() {
 
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
+
+    Game* game = cast(Game, 0x005eb4fc);
+    if (game) {
+        ImGui::Begin("aaaa", &show_demo_window2);
+        struct A
+        {
+            int i = 216;
+            bool b = true;
+        };
+        static A a;
+        static A* b = &a;
+        ImGui::Auto(b, "a");
+        auto ped = fnGetPedByID(1);
+        if (ped) {
+            //ImGui::Auto(ped, "ped");
+        }
+
+        ImGui::NewLine(); ImGui::Separator();
+
+        ImGui::End();
+    }
 
     ImGui::Render();
 
@@ -65,6 +88,12 @@ LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
         || io.WantCaptureKeyboard
         ) {
         ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
+        return TRUE;
+    }
+    if (msg == WM_SETCURSOR) {
+        //printf("WM_SETCURSOR\n");
+        SetCursor(LoadCursor(0, IDC_ARROW));
+        ShowCursor(1);
         return TRUE;
     }
     return CallWindowProc(originalWndProc, window, msg, wParam, lParam);

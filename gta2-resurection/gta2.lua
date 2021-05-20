@@ -844,7 +844,11 @@ local health = 10
 local fnGetPedByID = ffi.cast('GetPedById', 0x0043ae10)
 local pGame = nil
 
+local once = true
+local totalTime = 0.0
+
 function gameTick(dt)
+    totalTime = totalTime + dt
     local p = ffi.cast('int*', 0x005eb4fc)
     if p[0] == 0 then
         return
@@ -857,11 +861,11 @@ function gameTick(dt)
 		health = 10
 	end
 	-- print("tick1", dt, health)
-    local p = fnGetPedByID(1)
-    if p == nil then
+    local ped = fnGetPedByID(1)
+    if ped == nil then
         return
     end
-	local ped = ffi.cast('struct Ped*', p)
+
     ped.health = 100
 	print("health: ", ped.health)
 	if ped.car ~= nil then

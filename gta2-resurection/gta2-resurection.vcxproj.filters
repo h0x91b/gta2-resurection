@@ -63,6 +63,15 @@
     <ClInclude Include="imstb_truetype.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="auto.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="auto\core.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="auto\impl_base.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -99,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="auto\auto.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

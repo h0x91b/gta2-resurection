@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\Detours-4.0.1\include;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\..\Detours-4.0.1\include;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(ProjectDir)\auto\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\Detours-4.0.1\lib.X86;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(LibraryPath)</LibraryPath>
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\Detours-4.0.1\include;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\..\Detours-4.0.1\include;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(ProjectDir)\auto\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)\..\Detours-4.0.1\lib.X86;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(LibraryPath)</LibraryPath>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
@@ -100,6 +100,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -129,6 +130,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -185,6 +187,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="auto.h" />
+    <ClInclude Include="auto\core.h" />
+    <ClInclude Include="auto\impl_base.h" />
     <ClInclude Include="D3D_VMT_Indices.h" />
     <ClInclude Include="defines.h" />
     <ClInclude Include="dxhook.h" />
@@ -203,6 +208,10 @@
     <ClInclude Include="ui.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="auto\auto.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="dxhook.cpp" />
     <ClCompile Include="imgui.cpp">
