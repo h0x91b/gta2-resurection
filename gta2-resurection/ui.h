@@ -11,3 +11,11 @@ extern WNDPROC fnWndProc;
 void initUI(IDXGISwapChain*, ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 void renderUI();
 LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
+
+struct UISettings {
+    bool open;
+    bool do_show_cycles; 
+    bool do_show_physics; 
+    bool do_show_ids;
+};
+extern UISettings settings;

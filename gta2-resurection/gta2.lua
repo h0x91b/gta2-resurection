@@ -832,6 +832,14 @@ struct Game {
 } __attribute__ ((packed));
 
 typedef Ped* (__stdcall *GetPedById)(int);
+
+struct UISettings {
+    bool open;
+    bool do_show_cycles; 
+    bool do_show_physics; 
+    bool do_show_ids; 
+} __attribute__ ((packed));
+
 ]]
 
 local inspect = require 'inspect'
@@ -843,6 +851,7 @@ local health = 10
 -- static GetPedById fnGetPedByID = (GetPedById)0x0043ae10;
 local fnGetPedByID = ffi.cast('GetPedById', 0x0043ae10)
 local pGame = nil
+local settings = ffi.cast('struct UISettings*', getSettings())
 
 function gameTick(dt)
     local p = ffi.cast('int*', 0x005eb4fc)
@@ -868,4 +877,9 @@ function gameTick(dt)
 		print("car: id ", ped.car.id, ped.car.type)
 		ped.car.type = 53
 	end
+
+    -- print("settings.do_show_cycles", tostring(settings.do_show_cycles))
+    ffi.cast('bool*', 0x005eada7)[0] =  settings.do_show_cycles
+    ffi.cast('bool*', 0x005ead85)[0] =  settings.do_show_physics
+    ffi.cast('bool*', 0x005eada1)[0] =  settings.do_show_ids
 end

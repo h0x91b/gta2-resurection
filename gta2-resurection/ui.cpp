@@ -34,6 +34,8 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
 
 bool show_demo_window = true;
 
+UISettings settings = {TRUE};
+
 void renderUI() {
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -41,6 +43,13 @@ void renderUI() {
 
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
+
+    ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_FirstUseEver);
+    ImGui::Begin("Settings", &settings.open);
+        ImGui::Checkbox("do_show_cycles", &settings.do_show_cycles);
+        ImGui::Checkbox("do_show_physics", &settings.do_show_physics);
+        ImGui::Checkbox("do_show_ids", &settings.do_show_ids);
+    ImGui::End();
 
     ImGui::Render();
 
