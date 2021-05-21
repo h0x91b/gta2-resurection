@@ -14,6 +14,9 @@
 thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
     realGameTick(_this, _edx);
 
+    const size_t S = 4096;
+    char buf[S];
+
     static DWORD lastTicks = GetTickCount();
     DWORD currentTicks = GetTickCount();
     lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
@@ -21,7 +24,8 @@ thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
     auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
 
     if (x != LUA_OK) {
-        printf("Lua error: %s\n", lua_tostring(L, -1));
+        sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
+        OutputDebugStringA(buf);
     }
 
     lastTicks = currentTicks;
