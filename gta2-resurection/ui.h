@@ -6,7 +6,7 @@
 #include <d3d11.h>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-extern WNDPROC originalWndProc;
+extern WNDPROC fnWndProc;
 
 void initUI(IDXGISwapChain*, ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 void renderUI();

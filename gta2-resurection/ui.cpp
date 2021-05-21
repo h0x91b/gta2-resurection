@@ -2,10 +2,11 @@
 #include "ui.h"
 #include <stdio.h>
 #include "defines.h"
+#include "gta-helper.h"
 
 ID3D11DeviceContext* pDeviceContext;
 ID3D11RenderTargetView* mainRenderTargetView;
-WNDPROC originalWndProc = nullptr;
+WNDPROC fnWndProc = (WNDPROC)0x004d0a00;
 
 void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext) {
     IMGUI_CHECKVERSION();
@@ -50,16 +51,14 @@ void renderUI() {
 }
 
 LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
-    //printf("_wndProc\n");
+    //printf("_wndProc 0x%x\n", msg);
     ImGuiIO& io = ImGui::GetIO();
-
+     
     POINT mPos;
     GetCursorPos(&mPos);
     ScreenToClient(window, &mPos);
     ImGui::GetIO().MousePos.x = mPos.x;
     ImGui::GetIO().MousePos.y = mPos.y;
-
-    // ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
 
     if (io.WantCaptureMouse
         || io.WantCaptureKeyboard
@@ -67,5 +66,5 @@ LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
         ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
         return TRUE;
     }
-    return CallWindowProc(originalWndProc, window, msg, wParam, lParam);
+    return fnWndProc(window, msg, wParam, lParam);
 }

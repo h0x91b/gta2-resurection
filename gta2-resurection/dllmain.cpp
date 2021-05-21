@@ -40,14 +40,16 @@ void __fastcall addMoney(void* _this, DWORD _edx, int money) {
 DWORD WINAPI MainThread(HMODULE hModule) {
     OutputDebugString(L"MainThread");
 
-    AllocConsole();
-    FILE* fDummy;
-    freopen_s(&fDummy, "CONOUT$", "w", stdout);
+    //AllocConsole();
+    //FILE* fDummy;
+    //freopen_s(&fDummy, "CONOUT$", "w", stdout);
     printf("Console window activated, press HOME to activate detour\n");
 
-    while (!GetAsyncKeyState(VK_HOME)) {
-        Sleep(50);
-    }
+    Sleep(1000);
+
+    //while (!GetAsyncKeyState(VK_HOME)) {
+    //    Sleep(50);
+    //}
 
     // move windows
     RECT rect;
@@ -64,27 +66,6 @@ DWORD WINAPI MainThread(HMODULE hModule) {
         height,
         true
     );
-
-    hwnd = FindWindowA("ConsoleWindowClass", 0);
-
-    GetWindowRect(hwnd, &rect);
-    width = rect.right - rect.left;
-    height = rect.bottom - rect.top;
-    MoveWindow(hwnd,
-        screenX - width,
-        screenY - height,
-        width,
-        height,
-        true
-    );
-
-    DetourRestoreAfterWith();
-
-    DetourTransactionBegin();
-    DetourUpdateThread(GetCurrentThread());
-    // DetourAttach(&(PVOID&)TrueSleep, TimedSleep);
-    Attach(GameTick);
-    DetourTransactionCommit();
 	
     printf("DetourTransactionCommit done\n");
     Sleep(100);
@@ -94,24 +75,27 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     initLua();
     printf("initLua done\n");
     Sleep(100);
-    hwnd = FindWindowA("WinMain", "GTA2");
+
+    DetourRestoreAfterWith();
+
+    DetourTransactionBegin();
+    DetourUpdateThread(GetCurrentThread());
+    // DetourAttach(&(PVOID&)TrueSleep, TimedSleep);
+    DetourAttach(&(PVOID&)fnWndProc, _wndProc);
+    Attach(GameTick);
+    DetourTransactionCommit();
+
     printf("hwnd is found %X\n", hwnd);
-    originalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)_wndProc);
+    //originalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)_wndProc);
     printf("SetWindowLongPtr done\n");
 
     int frames = 0;
-    while (!GetAsyncKeyState(VK_F2)) {
+    while (true) {
         // our code
         if (GetAsyncKeyState(VK_F1)) {
             lua_close(L);
             initLua();
             Sleep(1000);
-        }
-        hwnd = FindWindowA("WinMain", "GTA2");
-        auto fn = GetWindowLongPtr(hwnd, GWLP_WNDPROC);
-        if (fn != (LONG_PTR)_wndProc) {
-            printf("Wrong wndproc, resetup it\n");
-            originalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)_wndProc);
         }
         Sleep(100);
     }
@@ -119,15 +103,23 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     DetourTransactionBegin();
     DetourUpdateThread(GetCurrentThread());
     //DetourDetach(&(PVOID&)TrueSleep, TimedSleep);
+    DetourDetach(&(PVOID&)fnWndProc, _wndProc);
     Dettach(GameTick);
     DetourTransactionCommit();
-    SetWindowLongA(hwnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(originalWndProc));
+   
     printf("Dettach and shutdown everything\n");
+    
 
-    // Close lua
+    printf("lua_close\n");
     lua_close(L);
-
+    
+    printf("FreeConsole\n");
+    //fclose(fDummy); 
+    //FreeConsole();
+    
     FreeLibraryAndExitThread(hModule, 0);
+    ExitProcess(0);
+    return 0;
 }
 
 BOOL APIENTRY DllMain( HMODULE hModule,

@@ -11,7 +11,8 @@ static_assert(offsetof(struct Ped, health) == 0x216, "Wrong offset of health in 
 #pragma endregion
 
 #pragma region gta
-Game* game = cast(Game, 0x005eb4fc);
+#define pGame 0x005eb4fc
+#define pFrontend 0x005eb160
 
 typedef Ped* (__stdcall GetPedById)(int);
 static GetPedById* fnGetPedByID = (GetPedById*)0x0043ae10;
