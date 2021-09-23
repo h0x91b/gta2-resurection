@@ -48,7 +48,7 @@ void initLua() {
 
     lua_register(L, "print", lPrint);
     lua_register(L, "getSettings", lGetSettings);
-    int x = luaL_dofile(L, "gta2.lua");// Загружает и запускает заданный файл. файл в которым все происходит.
+    int x = luaL_dofile(L, "gta2.lua"); // compile & execute file
 
     if (x != LUA_OK) {
         sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));

@@ -18,6 +18,8 @@ typedef unsigned short    word;
 typedef struct Ped Ped, *PPed;
 
 typedef undefined4 u4;
+typedef undefined1 u1;
+typedef undefined2 u2;
 
 typedef enum CAR_TYPE {
     CAR_TRUCK=63,
@@ -831,6 +833,66 @@ struct Game {
     struct S3 * s3;
 } __attribute__ ((packed));
 
+struct S9_cars {
+    undefined field_0x0;
+    undefined field_0x1;
+    undefined field_0x2;
+    undefined field_0x3;
+    undefined4 field_0x4;
+    undefined field_0x8;
+    undefined field_0x9;
+    undefined field_0xa;
+    undefined field_0xb;
+    undefined4 field_0xc;
+    undefined field_0x10;
+    undefined field_0x11;
+    undefined field_0x12;
+    undefined field_0x13;
+    undefined4 field_0x14;
+    undefined field_0x18;
+    undefined field_0x19;
+    undefined field_0x1a;
+    undefined field_0x1b;
+    undefined4 field_0x1c;
+    undefined4 field_0x20;
+    undefined4 field_0x24;
+    undefined4 field_0x28;
+    undefined4 field_0x2c;
+    undefined4 field_0x30;
+    undefined4 field_0x34;
+    undefined4 field_0x38;
+    undefined4 field_0x3c;
+    undefined4 field_0x40;
+    undefined4 field_0x44;
+    undefined field_0x48;
+    undefined field_0x49;
+    undefined field_0x4a;
+    undefined field_0x4b;
+    undefined field_0x4c;
+    undefined field_0x4d;
+    undefined field_0x4e;
+    undefined field_0x4f;
+    undefined field_0x50;
+    undefined field_0x51;
+    undefined field_0x52;
+    undefined field_0x53;
+    undefined field_0x54;
+    undefined field_0x55;
+    undefined field_0x56;
+    undefined field_0x57;
+    undefined4 field_0x58;
+    undefined field_0x5c;
+    undefined field_0x5d;
+    undefined field_0x5e;
+    undefined field_0x5f;
+    undefined4 field_0x60;
+    undefined4 field_0x64;
+    undefined field_0x68;
+    bool do_free_shopping; /* Created by retype action */
+    undefined field_0x6a;
+    undefined field_0x6b;
+} __attribute__ ((packed));
+
 typedef Ped* (__stdcall *GetPedById)(int);
 
 struct UISettings {
@@ -838,7 +900,9 @@ struct UISettings {
     bool do_show_cycles; 
     bool do_show_physics; 
     bool do_show_ids; 
-} __attribute__ ((packed));
+    bool do_free_shopping;
+    int copLevel;
+};
 
 ]]
 
@@ -851,9 +915,40 @@ local health = 10
 -- static GetPedById fnGetPedByID = (GetPedById)0x0043ae10;
 local fnGetPedByID = ffi.cast('GetPedById', 0x0043ae10)
 local pGame = nil
+print("UISettings")
 local settings = ffi.cast('struct UISettings*', getSettings())
+print("Ready")
+
+CPed = {}
+
+function CPed:new(id)
+    local o = {}
+    setmetatable(o, self)
+    o.id = id
+    o._self = self
+    local p = fnGetPedByID(id)
+    if p == nil then
+        return nil
+    end
+	o.ped = ffi.cast('struct Ped*', p)
+    o.__index = struct_index
+    return o
+end
+
+function CPed:__index( index )
+	-- print ("__index", index)
+    if self._self[index] then
+        return self._self[index]
+    end
+    return self.ped[index]
+end
+
+function CPed:getHealth()
+    return self.ped.health
+end
 
 function gameTick(dt)
+    print("gameTick")
     local p = ffi.cast('int*', 0x005eb4fc)
     if p[0] == 0 then
         return
@@ -861,10 +956,15 @@ function gameTick(dt)
 
     pGame = ffi.cast('struct Game*', 0x005eb4fc)
 
-	health = health + 10
-	if health > 100 then
-		health = 10
-	end
+    local pp = CPed:new(1)
+    print("pp ", inspect(pp))
+    print("pp pp:getHealth()", pp:getHealth())
+    print("pp pp.health", pp.health)
+
+	-- health = health + 10
+	-- if health > 100 then
+	-- 	health = 10
+	-- end
 	-- print("tick1", dt, health)
     local p = fnGetPedByID(1)
     if p == nil then
@@ -875,11 +975,50 @@ function gameTick(dt)
 	print("health: ", ped.health)
 	if ped.car ~= nil then
 		print("car: id ", ped.car.id, ped.car.type)
-		ped.car.type = 53
+		-- ped.car.type = 53
 	end
+
+    -- ped.copLevel = 0
 
     -- print("settings.do_show_cycles", tostring(settings.do_show_cycles))
     ffi.cast('bool*', 0x005eada7)[0] =  settings.do_show_cycles
     ffi.cast('bool*', 0x005ead85)[0] =  settings.do_show_physics
     ffi.cast('bool*', 0x005eada1)[0] =  settings.do_show_ids
+    -- COP_STAR_6=12000,     COP_STAR_3=3000,     COP_STAR_2=1600,     COP_STAR_5=8000,     COP_STAR_4=5000,     COP_STAR_1=600,     COP_STAR_0=0
+
+    print("copLevel", settings.copLevel, ped.copLevel)
+    if settings.copLevel == 0 then
+        ped.copLevel = 0
+    elseif settings.copLevel == 1 then
+        ped.copLevel = 600
+    elseif settings.copLevel == 2 then
+        ped.copLevel = 1600
+    elseif settings.copLevel == 3 then
+        ped.copLevel = 3000
+    elseif settings.copLevel == 4 then
+        ped.copLevel = 5000
+    elseif settings.copLevel == 5 then
+        ped.copLevel = 8000
+    elseif settings.copLevel == 6 then
+        ped.copLevel = 12000
+    end
+
+    -- 1)
+    -- setCopLevel(pedId, level)
+    -- 
+    -- 2)
+    -- ped = getPedById(1)
+    -- ped.setCopLevel(level)
+
+    --ffi.cast('bool*', 0x005ead84)[0] =  settings.do_free_shopping
+    --ffi.cast('bool*', 0x005e4ca4 + 0x69)[0] =  settings.do_free_shopping
+    local s9 = ffi.cast('struct S9_cars**', 0x005e4ca4)
+    --if s9 ~= nil then
+        print("s9.do_free_shopping", tostring(s9[0].do_free_shopping))
+        s9[0].do_free_shopping = settings.do_free_shopping 
+        
+        -- but below works well...
+        --print("s9.do_free_shopping", tostring(ffi.cast('bool*', ffi.cast('uint*', 0x005e4ca4)[0]+0x69)[0]))
+        --ffi.cast('bool*', ffi.cast('uint*', 0x005e4ca4)[0]+0x69)[0] = settings.do_free_shopping
+    --end
 end

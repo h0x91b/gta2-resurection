@@ -6,7 +6,7 @@
 #pragma pack(pop)   /* restore original alignment from stack */
 
 #pragma region asserts
-static_assert(sizeof(Ped) == 0x290, "Wrong size of Car struct");
+static_assert(sizeof(Ped) == 0x294, "Wrong size of Ped struct");
 static_assert(offsetof(struct Ped, health) == 0x216, "Wrong offset of health in Ped struct");
 #pragma endregion
 
