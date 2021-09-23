@@ -31,10 +31,26 @@ int lPrint(lua_State* L) {
     }
     OutputDebugStringA("\n");
     return 0;
-};
+}
 
 int lGetSettings(lua_State* L) {
-    lua_pushnumber(L, (DWORD)&settings);// отправляем в стек число.
+    lua_pushnumber(L, (DWORD)&settings); // return pointer to struct
+    return 1;
+}
+
+int lListMods(lua_State* L) {
+    lua_newtable(L);
+    WIN32_FIND_DATAA data;
+    HANDLE hFind = FindFirstFileA("mod-*.lua", &data);      // DIRECTORY
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+        int i = 1;
+        do {
+            lua_pushstring(L, data.cFileName);
+            lua_rawseti(L, -2, i++);
+        } while (FindNextFileA(hFind, &data));
+        FindClose(hFind);
+    }
     return 1;
 };
 
@@ -48,6 +64,7 @@ void initLua() {
 
     lua_register(L, "print", lPrint);
     lua_register(L, "getSettings", lGetSettings);
+    lua_register(L, "listMods", lListMods);
     int x = luaL_dofile(L, "gta2.lua"); // compile & execute file
 
     if (x != LUA_OK) {

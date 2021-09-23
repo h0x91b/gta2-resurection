@@ -243,7 +243,9 @@
     <ClCompile Include="ui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="gta2-def.lua" />
     <None Include="gta2.lua" />
+    <None Include="mod-hello-world.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
