@@ -51,6 +51,10 @@ function Mod.tick( dt, api )
 	end
 	local settings = api.getSettings()
 
+    if not settings.set_cop_level then
+        return
+    end
+
 	if settings.copLevel == 0 then
         ped.obj.copLevel = 0
     elseif settings.copLevel == 1 then

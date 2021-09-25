@@ -190,6 +190,7 @@
     <ClInclude Include="dxhook.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="gta-helper.h" />
+    <ClInclude Include="gta2.h" />
     <ClInclude Include="imconfig.h" />
     <ClInclude Include="imgui.h" />
     <ClInclude Include="imgui_impl_dx11.h" />

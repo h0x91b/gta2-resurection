@@ -14,6 +14,8 @@ struct UISettings {
     bool do_show_ids; 
     bool do_free_shopping;
     bool fast_cars;
+    bool flamethrower;
+    bool set_cop_level;
     int copLevel;
 };
 
