@@ -111,5 +111,7 @@
     <None Include="gta2-functions.lua" />
     <None Include="inspect.lua" />
     <None Include="mod-cop-level.lua" />
+    <None Include="mod-settings.lua" />
+    <None Include="mod-fastcar.lua" />
   </ItemGroup>
 </Project>

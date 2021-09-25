@@ -10,7 +10,7 @@ function Mod.initMod( api )
 	api.test()
 end
 
--- local lastCopLevel = 0
+-- local copLevel = 0
 -- 
 -- function Mod.tickPre( dt, api )
 --     print("Mod.tickPre", dt, api)
@@ -20,7 +20,7 @@ end
 -- 	end
 -- 	local settings = api.getSettings()
 -- 
---     if settings.copLevel ~= lastCopLevel then
+--     if ped.obj.copLevel == copLevel then
 --         return
 --     end
 -- 
@@ -40,7 +40,7 @@ end
 --         settings.copLevel = 6
 --     end
 -- 
---     lastCopLevel = settings.copLevel
+--     copLevel = settings.copLevel
 -- end
 
 function Mod.tick( dt, api )
