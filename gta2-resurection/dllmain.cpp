@@ -12,19 +12,48 @@
 #pragma comment(lib, "detours.lib")
 
 thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
-    realGameTick(_this, _edx);
-
     const size_t S = 4096;
     char buf[S];
 
     static DWORD lastTicks = GetTickCount();
     DWORD currentTicks = GetTickCount();
-    lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
+    lua_getglobal(L, "gameTickPre");// получаем из lua функцию gameTick.
     lua_pushnumber(L, (float)(currentTicks - lastTicks) / 1000);// отправляем в стек число.
     auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
 
     if (x != LUA_OK) {
         sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
+
+        lua_Debug info;
+        int level = 0;
+        while (lua_getstack(L, level, &info)) {
+            lua_getinfo(L, "nSl", &info);
+            sprintf_s(buf, S, "  [%d] %s:%d -- %s [%s]\n",
+                level, info.short_src, info.currentline,
+                (info.name ? info.name : "<unknown>"), info.what);
+            ++level;
+        }
+        OutputDebugStringA(buf);
+    }
+
+    realGameTick(_this, _edx);
+
+    lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
+    lua_pushnumber(L, (float)(currentTicks - lastTicks) / 1000);// отправляем в стек число.
+    x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
+
+    if (x != LUA_OK) {
+        sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
+
+        lua_Debug info;
+        int level = 0;
+        while (lua_getstack(L, level, &info)) {
+            lua_getinfo(L, "nSl", &info);
+            sprintf_s(buf, S, "  [%d] %s:%d -- %s [%s]\n",
+                level, info.short_src, info.currentline,
+                (info.name ? info.name : "<unknown>"), info.what);
+            ++level;
+        }
         OutputDebugStringA(buf);
     }
 

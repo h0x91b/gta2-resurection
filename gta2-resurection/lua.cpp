@@ -10,7 +10,15 @@ int lPrint(lua_State* L) {
     const size_t S = 4096;
     char buf[S];
     double n;
-    sprintf_s(buf, S, "[LUA:%d]", narg);
+    lua_Debug info;
+    int level = 1;
+    lua_getstack(L, level, &info);
+    lua_getinfo(L, "nSl", &info);
+    sprintf_s(buf, S, 
+        "[%s:%d]",
+        info.short_src, info.currentline
+    );
+    
     OutputDebugStringA(buf);
     for (auto i = 0; i < narg; i++) {
         if (LUA_TNUMBER == lua_type(L, i + 1)) {
@@ -23,6 +31,10 @@ int lPrint(lua_State* L) {
                 sprintf_s(buf, S, " %f", n);
                 OutputDebugStringA(buf);
             }
+        }
+        else if (LUA_TTABLE == lua_type(L, i + 1)) {
+            sprintf_s(buf, S, " <table>");
+            OutputDebugStringA(buf);
         }
         else {
             sprintf_s(buf, S, " %s", lua_tostring(L, i + 1));
@@ -69,6 +81,17 @@ void initLua() {
 
     if (x != LUA_OK) {
         sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
+
+        lua_Debug info;
+        int level = 0;
+        while (lua_getstack(L, level, &info)) {
+            lua_getinfo(L, "nSl", &info);
+            sprintf_s(buf, S, "  [%d] %s:%d -- %s [%s]\n",
+                level, info.short_src, info.currentline,
+                (info.name ? info.name : "<unknown>"), info.what);
+            ++level;
+        }
+
         OutputDebugStringA(buf);
     }
     else {
