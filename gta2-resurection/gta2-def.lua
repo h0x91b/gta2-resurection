@@ -896,19 +896,4 @@ struct S9_cars {
 } __attribute__ ((packed));
 
 typedef Ped* (__stdcall *GetPedById)(int);
-
-struct UISettings {
-    bool open;
-    bool do_show_cycles; 
-    bool do_show_physics; 
-    bool do_show_ids; 
-    bool do_free_shopping;
-    int copLevel;
-};
-
 ]]
-
-local inspect = require 'inspect'
-
-print("gta2-def.lua")
-

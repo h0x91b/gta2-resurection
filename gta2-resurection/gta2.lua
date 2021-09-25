@@ -5,6 +5,20 @@ local CPed = require 'cped'
 
 print("gta2.lua")
 
+ffi.cdef[[
+
+struct UISettings {
+    bool open;
+    bool do_show_cycles; 
+    bool do_show_physics; 
+    bool do_show_ids; 
+    bool do_free_shopping;
+    bool fast_cars;
+    int copLevel;
+};
+
+]]
+
 local API = {}
 
 function API.test( abc )

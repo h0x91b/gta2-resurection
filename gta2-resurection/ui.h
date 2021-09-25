@@ -18,6 +18,7 @@ struct UISettings {
     bool do_show_physics; 
     bool do_show_ids;
     bool do_free_shopping;
+    bool fast_cars;
     int copLevel;
 };
 extern UISettings settings;

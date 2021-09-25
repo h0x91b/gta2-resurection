@@ -15,7 +15,8 @@ function Mod.tick( dt, api )
 	if ped == nil then
 		return 
 	end
-	if ped.car ~= nil then
+	local settings = api.getSettings()
+	if ped.car ~= nil and settings.fast_cars then
 	 	print("car: id ", ped.car.id, ped.car.type)
 		ped.obj.car.type = 53
 	end

@@ -50,6 +50,7 @@ void renderUI() {
         ImGui::Checkbox("do_show_physics", &settings.do_show_physics);
         ImGui::Checkbox("do_show_ids", &settings.do_show_ids);
         ImGui::Checkbox("do_free_shopping", &settings.do_free_shopping);
+        ImGui::Checkbox("Fast cars", &settings.fast_cars);
         ImGui::SliderInt("Cop level", &settings.copLevel, 0, 6);
     ImGui::End();
 
