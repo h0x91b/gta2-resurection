@@ -244,8 +244,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
+    <None Include="cped.lua" />
+    <None Include="gta2-functions.lua" />
     <None Include="gta2-def.lua" />
     <None Include="gta2.lua" />
+    <None Include="inspect.lua" />
+    <None Include="mod-cop-level.lua" />
     <None Include="mod-hello-world.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

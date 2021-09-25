@@ -107,5 +107,9 @@
     <None Include="gta2-def.lua" />
     <None Include="mod-hello-world.lua" />
     <None Include="..\README.md" />
+    <None Include="cped.lua" />
+    <None Include="gta2-functions.lua" />
+    <None Include="inspect.lua" />
+    <None Include="mod-cop-level.lua" />
   </ItemGroup>
 </Project>
