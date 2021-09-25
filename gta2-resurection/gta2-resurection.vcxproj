@@ -243,6 +243,7 @@
     <ClCompile Include="ui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="gta2-def.lua" />
     <None Include="gta2.lua" />
     <None Include="mod-hello-world.lua" />
