@@ -26,7 +26,8 @@ function Mod.tick( dt, api )
 
 	if settings.flamethrower then
 		local pGame = ffi.cast('struct Game**', 0x005eb4fc)
-		pGame[0].player.flame_thrower.ammo = 100
+		local WEAPON_FLAMETHROWER = 8
+		pGame[0].player.weapons[WEAPON_FLAMETHROWER].ammo = 100
 	end
 end
 
