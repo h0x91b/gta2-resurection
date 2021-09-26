@@ -37,6 +37,7 @@
 			result = result.replace('typedef unsigned long long    GUID;', '');
 			result = result.replace('float10', '');
 			result = result.replace('typedef short    wchar_t;', '');
+			result = result.replace('typedef unsigned char    bool;', '');
 			result = result.replace(/(};)/g, '} __attribute__ ((packed));');
 			result = `local ffi = require("ffi")
 

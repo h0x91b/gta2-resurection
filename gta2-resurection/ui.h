@@ -4,6 +4,9 @@
 #include "imgui_impl_win32.h"
 #include "imgui_impl_dx11.h"
 #include <d3d11.h>
+#include <map>
+#include <string>
+#include <any>
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 extern WNDPROC fnWndProc;
@@ -11,6 +14,7 @@ extern WNDPROC fnWndProc;
 void initUI(IDXGISwapChain*, ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 void renderUI();
 LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
+extern std::map<std::string, std::any> UIBools;
 
 struct UISettings {
     bool open;
@@ -24,3 +28,12 @@ struct UISettings {
     int copLevel;
 };
 extern UISettings settings;
+
+struct UISlider {
+    const char* label;
+    int v;
+    int v_min;
+    int v_max;
+    const char* format = "%d";
+    ImGuiSliderFlags flags = 0;
+};

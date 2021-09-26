@@ -10,7 +10,7 @@ function Mod.initMod( api )
 end
 
 function Mod.tick( dt, api )
-    print("Mod.tick", dt, api)
+    -- print("Mod.tick", dt, api)
 	local ped = CPed:new(1)
 	if ped == nil then
 		return 

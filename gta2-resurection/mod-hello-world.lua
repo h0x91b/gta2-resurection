@@ -11,12 +11,12 @@ function Mod.initMod( api )
 end
 
 function Mod.tick( dt, api )
-    print("Mod.tick", dt, api)
+    -- print("Mod.tick", dt, api)
 	local ped = CPed:new(1)
 	if ped == nil then
 		return 
 	end
-	print('ped.health', ped.health)
+	-- print('ped.health', ped.health)
 	ped.obj.health = 100
 end
 

@@ -35,6 +35,9 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
 bool show_demo_window = true;
 
 UISettings settings = {TRUE};
+std::map<std::string, std::any> UIBools;
+
+
 
 void renderUI() {
     ImGui_ImplDX11_NewFrame();
@@ -54,6 +57,19 @@ void renderUI() {
         ImGui::Checkbox("Flamethrower", &settings.flamethrower);
         ImGui::Checkbox("Set Cop level", &settings.set_cop_level);
         ImGui::SliderInt("Cop level", &settings.copLevel, 0, 6);
+        for (auto& [key, value] : UIBools) {
+            if (!strcmp(value.type().name(), "bool *")) {
+                auto ref = std::any_cast<bool*>(value);
+                ImGui::Checkbox(key.c_str(), ref);
+            } else if (!strcmp(value.type().name(), "struct UISlider *")) {
+                auto ref = std::any_cast<UISlider*>(value);
+                ImGui::SliderInt(ref->label, &ref->v, ref->v_min, ref->v_max, ref->format, ref->flags);
+            } else {
+                OutputDebugStringA("Unknown type: ");
+                OutputDebugStringA(value.type().name());
+                OutputDebugStringA("\n");
+            }
+        }
     ImGui::End();
 
     ImGui::Render();

@@ -118,7 +118,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     Attach(GameTick);
     DetourTransactionCommit();
 
-    printf("hwnd is found %X\n", hwnd);
+    //printf("hwnd is found %X\n", hwnd);
     //originalWndProc = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)_wndProc);
     printf("SetWindowLongPtr done\n");
 
