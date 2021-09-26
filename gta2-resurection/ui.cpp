@@ -35,9 +35,7 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
 bool show_demo_window = true;
 
 UISettings settings = {TRUE};
-std::map<std::string, std::any> UIBools;
-
-
+std::unordered_map<std::string, std::any> UIElements;
 
 void renderUI() {
     ImGui_ImplDX11_NewFrame();
@@ -49,15 +47,7 @@ void renderUI() {
 
     ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_FirstUseEver);
     ImGui::Begin("Settings", &settings.open);
-        ImGui::Checkbox("do_show_cycles", &settings.do_show_cycles);
-        ImGui::Checkbox("do_show_physics", &settings.do_show_physics);
-        ImGui::Checkbox("do_show_ids", &settings.do_show_ids);
-        ImGui::Checkbox("do_free_shopping", &settings.do_free_shopping);
-        ImGui::Checkbox("Fast cars", &settings.fast_cars);
-        ImGui::Checkbox("Flamethrower", &settings.flamethrower);
-        ImGui::Checkbox("Set Cop level", &settings.set_cop_level);
-        ImGui::SliderInt("Cop level", &settings.copLevel, 0, 6);
-        for (auto& [key, value] : UIBools) {
+        for (auto& [key, value] : UIElements) {
             if (!strcmp(value.type().name(), "bool *")) {
                 auto ref = std::any_cast<bool*>(value);
                 ImGui::Checkbox(key.c_str(), ref);

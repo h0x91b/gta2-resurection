@@ -28,7 +28,7 @@ int lAddSliderSetting(lua_State* L) {
         val->flags = lua_tonumber(L, 6);
     }
 
-    UIBools[val->label] = val;
+    UIElements[val->label] = val;
     return 0;
 }
 
@@ -46,7 +46,7 @@ int lAddBooleanSetting(lua_State* L) {
     bool* val = new bool;
     *val = static_cast<bool>(lua_toboolean(L, 2));
 
-    UIBools[lua_tostring(L, 1)] = val;
+    UIElements[lua_tostring(L, 1)] = val;
     return 0;
 }
 
@@ -110,11 +110,11 @@ int lGetSetting(lua_State* L) {
 
     auto k = lua_tostring(L, 1);
     
-    if (UIBools.find(k) == UIBools.end()) {
+    if (UIElements.find(k) == UIElements.end()) {
         lua_pushliteral(L, "Setting with such name is not found");
         return -1;  /* error flag */
     }
-    auto setting = UIBools[k];
+    auto setting = UIElements[k];
 
     if (!strcmp(setting.type().name(), "bool *")) {
         lua_pushboolean(L, *(std::any_cast<bool*>(setting)));

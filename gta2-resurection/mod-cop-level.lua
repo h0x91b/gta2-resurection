@@ -6,8 +6,9 @@ print("mod hello world")
 local Mod = {}
 
 function Mod.initMod( api )
-	print("initMod", inspect(api))
-	api.test()
+	-- print("initMod", inspect(api))
+	addBooleanSetting("Set cop level", true)
+    addSliderSetting("Cop level", 0, 0, 6)
 end
 
 -- local copLevel = 0
@@ -51,23 +52,24 @@ function Mod.tick( dt, api )
 	end
 	local settings = api.getSettings()
 
-    if not settings.set_cop_level then
+    if not getSetting("Set cop level") then
         return
     end
 
-	if settings.copLevel == 0 then
+    local copLevel = getSetting("Cop level")
+	if copLevel == 0 then
         ped.obj.copLevel = 0
-    elseif settings.copLevel == 1 then
+    elseif copLevel == 1 then
         ped.obj.copLevel = 600
-    elseif settings.copLevel == 2 then
+    elseif copLevel == 2 then
         ped.obj.copLevel = 1600
-    elseif settings.copLevel == 3 then
+    elseif copLevel == 3 then
         ped.obj.copLevel = 3000
-    elseif settings.copLevel == 4 then
+    elseif copLevel == 4 then
         ped.obj.copLevel = 5000
-    elseif settings.copLevel == 5 then
+    elseif copLevel == 5 then
         ped.obj.copLevel = 8000
-    elseif settings.copLevel == 6 then
+    elseif copLevel == 6 then
         ped.obj.copLevel = 12000
     end
 

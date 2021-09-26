@@ -74,12 +74,8 @@ print("UISettings")
 local settings = ffi.cast('struct UISettings*', getSettings())
 print("Ready")
 
-addBooleanSetting("test1", true)
-
-addSliderSetting("slider1", 1, 0, 100)
-
 function gameTickPre(dt)
-    print("gameTickPre", getSetting("test1"), getSetting("slider1"))
+    print("gameTickPre")
 
     for i = 1, #loadedMods do
         local mod = loadedMods[i]

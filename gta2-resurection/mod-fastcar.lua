@@ -7,6 +7,7 @@ print("mod hello world")
 local Mod = {}
 
 function Mod.initMod( api )
+	addBooleanSetting("Fast Cars", false)
 end
 
 function Mod.tick( dt, api )
@@ -15,8 +16,7 @@ function Mod.tick( dt, api )
 	if ped == nil then
 		return 
 	end
-	local settings = api.getSettings()
-	if ped.car ~= nil and settings.fast_cars then
+	if ped.car ~= nil and getSetting("Fast Cars") then
 	 	print("car: id ", ped.car.id, ped.car.type)
 		ped.obj.car.type = 19
 	end

@@ -7,6 +7,11 @@ print("mod hello world")
 local Mod = {}
 
 function Mod.initMod( api )
+	addBooleanSetting("Show cycles", false)
+	addBooleanSetting("Show physics", false)
+	addBooleanSetting("Show id's", false)
+	addBooleanSetting("Free shoping", false)
+	addBooleanSetting("Get flamethrower", false)
 end
 
 function Mod.tick( dt, api )
@@ -15,16 +20,15 @@ function Mod.tick( dt, api )
 	if ped == nil then
 		return 
 	end
-	local settings = api.getSettings()
 
-	ffi.cast('bool*', 0x005eada7)[0] =  settings.do_show_cycles
-    ffi.cast('bool*', 0x005ead85)[0] =  settings.do_show_physics
-    ffi.cast('bool*', 0x005eada1)[0] =  settings.do_show_ids
+	ffi.cast('bool*', 0x005eada7)[0] = getSetting("Show cycles")
+    ffi.cast('bool*', 0x005ead85)[0] = getSetting("Show physics")
+    ffi.cast('bool*', 0x005eada1)[0] = getSetting("Show id's")
 
     local s9 = ffi.cast('struct S9_cars**', 0x005e4ca4)
-    s9[0].do_free_shopping = settings.do_free_shopping
+    s9[0].do_free_shopping = getSetting("Free shoping")
 
-	if settings.flamethrower then
+	if getSetting("Get flamethrower") then
 		local pGame = ffi.cast('struct Game**', 0x005eb4fc)
 		local WEAPON_FLAMETHROWER = 8
 		pGame[0].player.weapons[WEAPON_FLAMETHROWER].ammo = 100

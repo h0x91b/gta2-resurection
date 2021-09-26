@@ -5,6 +5,7 @@
 #include "imgui_impl_dx11.h"
 #include <d3d11.h>
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <any>
 
@@ -14,7 +15,7 @@ extern WNDPROC fnWndProc;
 void initUI(IDXGISwapChain*, ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 void renderUI();
 LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
-extern std::map<std::string, std::any> UIBools;
+extern std::unordered_map<std::string, std::any> UIElements;
 
 struct UISettings {
     bool open;
