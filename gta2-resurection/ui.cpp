@@ -35,7 +35,7 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
 bool show_demo_window = true;
 
 UISettings settings = {TRUE};
-std::unordered_map<std::string, std::any> UIElements;
+std::vector<std::pair<std::string, std::any>> UIElements;
 
 void renderUI() {
     ImGui_ImplDX11_NewFrame();
