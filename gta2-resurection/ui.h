@@ -15,7 +15,7 @@ extern WNDPROC fnWndProc;
 void initUI(IDXGISwapChain*, ID3D11Device* pDevice, ID3D11DeviceContext* pDeviceContext);
 void renderUI();
 LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam);
-extern std::unordered_map<std::string, std::any> UIElements;
+
 extern std::vector<std::pair<std::string, std::any>> UIElements;
 
 struct UISettings {
