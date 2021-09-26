@@ -1,0 +1,60 @@
+<!doctype html>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Convert ghidra export to FFI specs</title>
+</head>
+<body>
+	<h1>Convert ghidra export to FFI specs</h1>
+	<div>
+		<input type="file" name="hFile" accept=".h">
+	</div>
+	<textarea cols=100 rows="50"></textarea>
+	<script>
+		function onChange() {
+			console.log('convert', this)
+			if(this.files.length < 1) {
+				return;
+			}
+			console.dir(this.files)
+
+			var reader = new FileReader();
+
+			reader.onload = function (evt) {
+				console.log('here we go', reader, evt.target.result)
+				const textarea = document.querySelector('textarea')
+				textarea.value = convert(evt.target.result)
+				textarea.focus();
+  				textarea.select();
+  				document.execCommand('copy');
+			}
+			reader.readAsText(this.files[0]);
+		}
+
+		function convert(headerFile) {
+			let result = headerFile;
+			result = result.replace('typedef unsigned long long    GUID;', '');
+			result = result.replace('float10', '');
+			result = result.replace('typedef short    wchar_t;', '');
+			result = result.replace(/(};)/g, '} __attribute__ ((packed));');
+			result = `local ffi = require("ffi")
+
+-- #
+
+ffi.cdef[[
+
+${result}
+
+
+typedef Ped* (__stdcall *GetPedById)(int);
+]]
+
+`
+			return result
+		}
+
+		document.querySelector('input[name="hFile"]').addEventListener('change', onChange);
+	</script>
+</body>
+</html>
