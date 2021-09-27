@@ -1,9 +1,9 @@
 typedef unsigned char   undefined;
 
 typedef unsigned int    ImageBaseOffset32;
+//typedef unsigned char    bool;
 typedef unsigned char    byte;
 typedef unsigned int    dword;
-typedef long long    longlong;
 typedef unsigned char    uchar;
 typedef unsigned int    uint;
 typedef unsigned long    ulong;
@@ -12,6 +12,7 @@ typedef unsigned short    undefined2;
 typedef unsigned int    undefined4;
 typedef unsigned long long    undefined8;
 typedef unsigned short    ushort;
+//typedef short    wchar_t;
 typedef unsigned short    word;
 typedef struct AllCars AllCars, *PAllCars;
 
@@ -38,7 +39,11 @@ typedef struct S3Bytes S3Bytes, *PS3Bytes;
 
 typedef struct Player_S4 Player_S4, *PPlayer_S4;
 
+typedef struct PedS1 PedS1, *PPedS1;
+
 typedef struct PlayerWeapon PlayerWeapon, *PPlayerWeapon;
+
+typedef struct PedSprite PedSprite, *PPedSprite;
 
 struct Car {
     undefined2 xxx;
@@ -2064,6 +2069,137 @@ struct CarSprite {
     ushort color;
 };
 
+struct PedS1 {
+    undefined field_0x0;
+    undefined field_0x1;
+    undefined field_0x2;
+    undefined field_0x3;
+    undefined field_0x4;
+    undefined field_0x5;
+    undefined field_0x6;
+    undefined field_0x7;
+    undefined field_0x8;
+    undefined field_0x9;
+    undefined field_0xa;
+    undefined field_0xb;
+    undefined field_0xc;
+    undefined field_0xd;
+    undefined field_0xe;
+    undefined field_0xf;
+    undefined field_0x10;
+    undefined field_0x11;
+    undefined field_0x12;
+    undefined field_0x13;
+    undefined field_0x14;
+    undefined field_0x15;
+    undefined field_0x16;
+    undefined field_0x17;
+    undefined field_0x18;
+    undefined field_0x19;
+    undefined field_0x1a;
+    undefined field_0x1b;
+    undefined field_0x1c;
+    undefined field_0x1d;
+    undefined field_0x1e;
+    undefined field_0x1f;
+    undefined field_0x20;
+    undefined field_0x21;
+    undefined field_0x22;
+    undefined field_0x23;
+    undefined field_0x24;
+    undefined field_0x25;
+    undefined field_0x26;
+    undefined field_0x27;
+    undefined field_0x28;
+    undefined field_0x29;
+    undefined field_0x2a;
+    undefined field_0x2b;
+    undefined field_0x2c;
+    undefined field_0x2d;
+    undefined field_0x2e;
+    undefined field_0x2f;
+    undefined field_0x30;
+    undefined field_0x31;
+    undefined field_0x32;
+    undefined field_0x33;
+    undefined field_0x34;
+    undefined field_0x35;
+    undefined field_0x36;
+    undefined field_0x37;
+    undefined field_0x38;
+    undefined field_0x39;
+    undefined field_0x3a;
+    undefined field_0x3b;
+    undefined field_0x3c;
+    undefined field_0x3d;
+    undefined field_0x3e;
+    undefined field_0x3f;
+    short rotation;
+    undefined field_0x42;
+    undefined field_0x43;
+    undefined field_0x44;
+    undefined field_0x45;
+    undefined field_0x46;
+    undefined field_0x47;
+    undefined field_0x48;
+    undefined field_0x49;
+    undefined field_0x4a;
+    undefined field_0x4b;
+    undefined field_0x4c;
+    undefined field_0x4d;
+    undefined field_0x4e;
+    undefined field_0x4f;
+    undefined field_0x50;
+    undefined field_0x51;
+    undefined field_0x52;
+    undefined field_0x53;
+    undefined field_0x54;
+    undefined field_0x55;
+    undefined field_0x56;
+    undefined field_0x57;
+    undefined field_0x58;
+    undefined field_0x59;
+    undefined field_0x5a;
+    undefined field_0x5b;
+    undefined field_0x5c;
+    undefined field_0x5d;
+    undefined field_0x5e;
+    undefined field_0x5f;
+    undefined field_0x60;
+    undefined field_0x61;
+    undefined field_0x62;
+    undefined field_0x63;
+    undefined field_0x64;
+    undefined field_0x65;
+    undefined field_0x66;
+    undefined field_0x67;
+    undefined field_0x68;
+    undefined field_0x69;
+    undefined field_0x6a;
+    undefined field_0x6b;
+    undefined field_0x6c;
+    undefined field_0x6d;
+    undefined field_0x6e;
+    undefined field_0x6f;
+    undefined field_0x70;
+    undefined field_0x71;
+    undefined field_0x72;
+    undefined field_0x73;
+    undefined field_0x74;
+    undefined field_0x75;
+    undefined field_0x76;
+    undefined field_0x77;
+    undefined field_0x78;
+    undefined field_0x79;
+    undefined field_0x7a;
+    undefined field_0x7b;
+    undefined field_0x7c;
+    undefined field_0x7d;
+    undefined field_0x7e;
+    undefined field_0x7f;
+    struct PedSprite * sprite;
+};
+
 struct S3Bytes {
     u1 a;
     u1 b;
@@ -2091,7 +2227,7 @@ struct Ped {
     struct Player_S4 * player;
     struct Ped * nextPed;
     int field_0x164;
-    int ptr;
+    struct PedS1 * pedS1;
     struct Car * car;
     undefined4 field_0x170;
     undefined4 field_0x174;
@@ -2110,7 +2246,7 @@ struct Ped {
     undefined * field_0x1a8;
     int cameraX;
     int cameraY;
-    int field_0x1b4;
+    int cameraZ;
     undefined * field_0x1b8;
     undefined * field_0x1bc;
     undefined * field_0x1c0;
@@ -2201,6 +2337,31 @@ struct Ped {
     undefined4 field_0x288;
     int field_0x28c;
     undefined4 field_0x290;
+};
+
+struct PedSprite {
+    undefined2 readonlyRotation;
+    undefined field_0x2;
+    undefined field_0x3;
+    undefined field_0x4;
+    undefined field_0x5;
+    undefined field_0x6;
+    undefined field_0x7;
+    undefined field_0x8;
+    undefined field_0x9;
+    undefined field_0xa;
+    undefined field_0xb;
+    undefined field_0xc;
+    undefined field_0xd;
+    undefined field_0xe;
+    undefined field_0xf;
+    undefined field_0x10;
+    undefined field_0x11;
+    undefined field_0x12;
+    undefined field_0x13;
+    u4 x;
+    u4 y;
+    u4 z;
 };
 
 typedef struct CarS1 CarS1, *PCarS1;
@@ -2692,7 +2853,7 @@ struct Frontend {
     undefined2 field_0x11e;
     undefined2 field_0x120;
     struct FrontendS1 arr1[17];
-    WCHAR name[9]; /* Created by retype action */
+    WCHAR name[9];
     undefined field_0xc99e;
     undefined field_0xc99f;
     undefined field_0xc9a0;

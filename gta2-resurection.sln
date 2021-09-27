@@ -7,18 +7,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gta2-resurection", "gta2-re
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
-		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Debug|x64.ActiveCfg = Debug|x64
-		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Debug|x64.Build.0 = Debug|x64
 		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Debug|x86.ActiveCfg = Debug|Win32
 		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Debug|x86.Build.0 = Debug|Win32
-		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Release|x64.ActiveCfg = Release|x64
-		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Release|x64.Build.0 = Release|x64
 		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Release|x86.ActiveCfg = Release|Win32
 		{A775CFC7-2E8F-4541-916E-CE7468EA6F62}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
