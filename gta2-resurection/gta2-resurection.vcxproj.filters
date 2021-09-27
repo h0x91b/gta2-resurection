@@ -116,5 +116,6 @@
     <None Include="mod-cop-level.lua" />
     <None Include="mod-settings.lua" />
     <None Include="mod-fastcar.lua" />
+    <None Include="mod-mouse-rotation.lua" />
   </ItemGroup>
 </Project>

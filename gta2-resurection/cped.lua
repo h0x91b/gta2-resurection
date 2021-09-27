@@ -39,4 +39,22 @@ function CPed:getHealth()
     return self.obj.health
 end
 
+function CPed:getRotation()
+    local rot = self.obj.pedS1.rotation
+    local normalized = math.fmod((rot / 4 - 90), 360)
+    if normalized < 0 then
+        normalized = normalized + 360
+    end
+	return normalized,rot
+end
+
+function CPed:setRotation(angle)
+    local denormalized = math.fmod(angle, 360)
+    while denormalized < 0 do
+        denormalized = denormalized + 360
+    end
+    denormalized = (denormalized + 90) * 4
+    self.obj.pedS1.rotation = denormalized
+end
+
 return CPed
