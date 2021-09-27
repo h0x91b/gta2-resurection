@@ -9,3 +9,4 @@
 
 void initLua();
 extern lua_State* L;
+void LeftMouse(bool isDown);

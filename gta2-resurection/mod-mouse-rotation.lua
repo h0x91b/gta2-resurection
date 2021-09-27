@@ -7,6 +7,8 @@ function Mod.initMod( api )
 	addBooleanSetting("Mouse rotation", true)
 end
 
+local prevAttack = false
+
 function Mod.tickPre( dt, api )
     -- print("Mod.tick", dt, api)
 	local ped = CPed:new(1)
@@ -19,18 +21,30 @@ function Mod.tickPre( dt, api )
     end
 
 	local rotation, originalRotation = ped:getRotation()
-    print("rotation", rotation, originalRotation)
+    -- print("rotation", rotation, originalRotation)
 	
 	local x, y, width, height = getCursorPos()
 	print("getCursorPos", x, y, width, height)
 
 	-- fix aspect ratio
 	local aspect = width / height
-	print("apect ratio", aspect)
+	-- print("apect ratio", aspect)
 	local mouseAngle = math.deg(math.atan2(x-0.5, (y-0.5) / aspect)) - 90.0
 
 	print("mouseAngle", mouseAngle)
 	ped:setRotation(mouseAngle)
+
+	print("IsLeftMouseDown", api.IsLeftMouseDown)
+	if api.IsLeftMouseDown then
+		ped.obj.player.field_0x7c = 1
+		ped.obj.player.field_0x8d = prevAttack ~= 1
+		prevAttack = true
+	else
+		ped.obj.player.field_0x7c = 0
+		ped.obj.player.field_0x8d = prevAttack ~= 0
+		prevAttack = false
+	end
+	print("setted")
 end
 
 return Mod

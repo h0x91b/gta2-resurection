@@ -38,9 +38,9 @@ thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
 
     realGameTick(_this, _edx);
 
-    lua_getglobal(L, "gameTick");// получаем из lua функцию gameTick.
-    lua_pushnumber(L, (float)(currentTicks - lastTicks) / 1000);// отправляем в стек число.
-    x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
+    lua_getglobal(L, "gameTick");
+    lua_pushnumber(L, (float)(currentTicks - lastTicks) / 1000);
+    x = lua_pcall(L, 1, 0, 0);
 
     if (x != LUA_OK) {
         sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));

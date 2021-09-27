@@ -21,7 +21,9 @@ struct UISettings {
 
 ]]
 
-local API = {}
+local API = {
+    IsLeftMouseDown = false
+}
 
 function API.test( abc )
    print("API.test", abc)	
@@ -76,6 +78,7 @@ print("Ready")
 
 function gameTickPre(dt)
     print("gameTickPre")
+    API.IsLeftMouseDown = IsLeftMouseDown
 
     for i = 1, #loadedMods do
         local mod = loadedMods[i]

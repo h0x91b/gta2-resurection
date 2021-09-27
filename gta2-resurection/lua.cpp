@@ -232,3 +232,8 @@ void initLua() {
         OutputDebugStringA(buf);
     }
 }
+
+void LeftMouse(bool isDown) {
+    lua_pushboolean(L, isDown);
+    lua_setglobal(L, "IsLeftMouseDown");
+}

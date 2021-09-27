@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "defines.h"
 #include "gta-helper.h"
+#include "lua.h"
 
 ID3D11DeviceContext* pDeviceContext;
 ID3D11RenderTargetView* mainRenderTargetView;
@@ -85,6 +86,10 @@ LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
         ) {
         ImGui_ImplWin32_WndProcHandler(window, msg, wParam, lParam);
         return TRUE;
+    } else if (msg == WM_LBUTTONDOWN) {
+        LeftMouse(true);
+    } else if (msg == WM_LBUTTONUP) {
+        LeftMouse(false);
     }
     return fnWndProc(window, msg, wParam, lParam);
 }
