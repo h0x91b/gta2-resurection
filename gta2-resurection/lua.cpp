@@ -157,6 +157,43 @@ int lListMods(lua_State* L) {
     return 1;
 };
 
+int lGetCursorPos(lua_State* L) {
+    POINT p;
+    GetCursorPos(&p);
+    
+    RECT wrect;
+    auto hwnd = FindWindowA("WinMain", "GTA2");
+    GetWindowRect(hwnd, &wrect);
+    
+    double x, y;
+
+    // https://stackoverflow.com/questions/56549853/windows-getting-a-window-title-bars-height/56620749
+    RECT crect;
+    GetClientRect(hwnd, &crect);
+    POINT lefttop = { crect.left, crect.top }; // Practicaly both are 0
+    ClientToScreen(hwnd, &lefttop);
+    POINT rightbottom = { crect.right, crect.bottom };
+    ClientToScreen(hwnd, &rightbottom);
+
+    int left_border = lefttop.x - wrect.left; // Windows 10: includes transparent part
+    int right_border = wrect.right - rightbottom.x; // As above
+    int bottom_border = wrect.bottom - rightbottom.y; // As above
+    int top_border_with_title_bar = lefttop.y - wrect.top; // There is no transparent part
+
+    auto width = wrect.right - wrect.left - left_border - right_border;
+    auto height = wrect.bottom - wrect.top - top_border_with_title_bar - bottom_border;
+
+    x = (p.x - wrect.left - left_border) / (double)width;
+    y = (p.y - wrect.top - top_border_with_title_bar) / (double)(height);
+
+    lua_pushnumber(L, x);
+    lua_pushnumber(L, y);
+    lua_pushnumber(L, width);
+    lua_pushnumber(L, height);
+
+    return 4;
+};
+
 void initLua() {
     const size_t S = 4096;
     char buf[S];
@@ -168,6 +205,7 @@ void initLua() {
     lua_register(L, "print", lPrint);
     lua_register(L, "getSettings", lGetSettings);
     lua_register(L, "listMods", lListMods);
+    lua_register(L, "getCursorPos", lGetCursorPos);
     lua_register(L, "addBooleanSetting", lAddBooleanSetting);
     lua_register(L, "addSliderSetting", lAddSliderSetting);
     lua_register(L, "getSetting", lGetSetting);
