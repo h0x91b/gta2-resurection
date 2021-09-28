@@ -63,6 +63,9 @@ int lPrint(lua_State* L) {
         "[%s:%d]",
         info.short_src, info.currentline
     );
+    log("[%s:%d]",
+        info.short_src, info.currentline
+    );
     
     OutputDebugStringA(buf);
     for (auto i = 0; i < narg; i++) {
@@ -70,28 +73,39 @@ int lPrint(lua_State* L) {
             n = lua_tonumber(L, i + 1);
             if (n == (int)n) {
                 sprintf_s(buf, S, " 0x%X(%i)", (int)n, (int)n);
+                log(" 0x%X(%i)", (int)n, (int)n);
                 OutputDebugStringA(buf);
             }
             else {
                 sprintf_s(buf, S, " %f", n);
+                log(" %f", n);
                 OutputDebugStringA(buf);
             }
         }
         else if (LUA_TTABLE == lua_type(L, i + 1)) {
             sprintf_s(buf, S, " <table>");
+            log(" <table>");
             OutputDebugStringA(buf);
         }
         else if (LUA_TBOOLEAN == lua_type(L, i + 1)) {
             bool b = lua_toboolean(L, i + 1);
             sprintf_s(buf, S, " %s", b ? "true" : "false");
+            log(" %s", b ? "true" : "false");
+            OutputDebugStringA(buf);
+        }
+        else if (LUA_TSTRING == lua_type(L, i + 1)) {
+            sprintf_s(buf, S, " %s", lua_tostring(L, i + 1));
+            log(" %s", lua_tostring(L, i + 1));
             OutputDebugStringA(buf);
         }
         else {
             sprintf_s(buf, S, " %s(%d)", lua_tostring(L, i + 1), lua_type(L, i + 1));
+            log(" %s(%d)", lua_tostring(L, i + 1), lua_type(L, i + 1));
             OutputDebugStringA(buf);
         }
     }
     OutputDebugStringA("\n");
+    log("\n");
     return 0;
 }
 

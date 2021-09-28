@@ -82,7 +82,7 @@ print("Ready")
 -- ffi.cast('bool*', 0x005ead86)[0] = true
 
 function gameTickPre(dt)
-    print("gameTickPre")
+    -- print("gameTickPre")
     API.IsLeftMouseDown = IsLeftMouseDown
     API.IsRightMouseDown = IsRightMouseDown
 
@@ -122,7 +122,7 @@ function gameTickPre(dt)
 end
 
 function gameTick(dt)
-    print("gameTick")
+    -- print("gameTick")
 
     for i = 1, #loadedMods do
         local mod = loadedMods[i]

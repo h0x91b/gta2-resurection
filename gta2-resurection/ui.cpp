@@ -94,6 +94,21 @@ void renderUI() {
             }
             ImGui::EndTabItem();
         }
+
+        if (ImGui::BeginTabItem("Logs"))
+        {
+            ImGui::BeginChild("Log", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+
+            for (auto i = _log.rbegin(); i != _log.rend(); i++) {
+                ImGui::TextUnformatted(i->c_str());
+            }
+
+            ImGui::PopStyleVar();
+            ImGui::EndChild();
+            ImGui::EndTabItem();
+        }
+
         ImGui::EndTabBar();
     }
     
@@ -132,4 +147,20 @@ LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
         RightMouse(false);
     }
     return fnWndProc(window, msg, wParam, lParam);
+}
+
+std::vector<std::string> _log;
+
+void log(const char* fmt, ...) {
+    char buf[1024];
+    va_list args;
+    va_start(args, fmt);
+    auto len = vsnprintf(buf, 1024, fmt, args);
+    va_end(args);
+    _log.push_back(buf);
+    OutputDebugStringA(buf);
+
+    if (_log.size() > 100) {
+        _log.erase(_log.begin());
+    }
 }
