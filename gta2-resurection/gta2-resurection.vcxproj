@@ -330,6 +330,7 @@
     <ClCompile Include="ui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Installer\installer.iss" />
     <None Include="..\README.md" />
     <None Include="cped.lua" />
     <None Include="gta2-functions.lua" />

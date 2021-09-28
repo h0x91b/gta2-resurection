@@ -117,5 +117,6 @@
     <None Include="mod-settings.lua" />
     <None Include="mod-fastcar.lua" />
     <None Include="mod-mouse-rotation.lua" />
+    <None Include="..\Installer\installer.iss" />
   </ItemGroup>
 </Project>
