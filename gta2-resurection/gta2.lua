@@ -1,3 +1,5 @@
+package.path = './scripts/?.lua;' .. package.path
+
 local ffi = require("ffi")
 local inspect = require 'inspect'
 local defs = require 'gta2-def'
@@ -75,6 +77,9 @@ local pGame = nil
 print("UISettings")
 local settings = ffi.cast('struct UISettings*', getSettings())
 print("Ready")
+
+-- ignore_replay_header
+-- ffi.cast('bool*', 0x005ead86)[0] = true
 
 function gameTickPre(dt)
     print("gameTickPre")

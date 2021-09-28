@@ -144,7 +144,7 @@ int lGetSetting(lua_State* L) {
 int lListMods(lua_State* L) {
     lua_newtable(L);
     WIN32_FIND_DATAA data;
-    HANDLE hFind = FindFirstFileA("mod-*.lua", &data);      // DIRECTORY
+    HANDLE hFind = FindFirstFileA("scripts\\mod-*.lua", &data);      // DIRECTORY
 
     if (hFind != INVALID_HANDLE_VALUE) {
         int i = 1;
@@ -209,7 +209,7 @@ void initLua() {
     lua_register(L, "addBooleanSetting", lAddBooleanSetting);
     lua_register(L, "addSliderSetting", lAddSliderSetting);
     lua_register(L, "getSetting", lGetSetting);
-    int x = luaL_dofile(L, "gta2.lua"); // compile & execute file
+    int x = luaL_dofile(L, "scripts\\gta2.lua"); // compile & execute file
 
     if (x != LUA_OK) {
         sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
