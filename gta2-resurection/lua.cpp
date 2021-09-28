@@ -243,3 +243,23 @@ void RightMouse(bool isDown) {
     lua_setglobal(L, "IsRightMouseDown");
 }
 
+void restartLua() {
+    lua_close(L);
+    for (auto& [key, value] : UIElements) {
+        if (!strcmp(value.type().name(), "bool *")) {
+            auto ref = std::any_cast<bool*>(value);
+            delete ref;
+        }
+        else if (!strcmp(value.type().name(), "struct UISlider *")) {
+            auto ref = std::any_cast<UISlider*>(value);
+            delete ref;
+        }
+        else {
+            OutputDebugStringA("Unknown type: ");
+            OutputDebugStringA(value.type().name());
+            OutputDebugStringA("\n");
+        }
+    }
+    UIElements.clear();
+    initLua();
+}

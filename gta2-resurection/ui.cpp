@@ -47,20 +47,53 @@ void renderUI() {
         ImGui::ShowDemoWindow(&show_demo_window);
 
     ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Settings", &settings.open);
-        for (auto& [key, value] : UIElements) {
-            if (!strcmp(value.type().name(), "bool *")) {
-                auto ref = std::any_cast<bool*>(value);
-                ImGui::Checkbox(key.c_str(), ref);
-            } else if (!strcmp(value.type().name(), "struct UISlider *")) {
-                auto ref = std::any_cast<UISlider*>(value);
-                ImGui::SliderInt(ref->label, &ref->v, ref->v_min, ref->v_max, ref->format, ref->flags);
-            } else {
-                OutputDebugStringA("Unknown type: ");
-                OutputDebugStringA(value.type().name());
-                OutputDebugStringA("\n");
-            }
+    ImGui::Begin("Settings", &settings.open, ImGuiWindowFlags_AlwaysAutoResize);
+
+    // Red reload button
+    {
+        ImGui::PushID(1);
+        ImGui::PushStyleColor(ImGuiCol_Button, (ImVec4)ImColor::HSV(0 / 7.0f, 0.6f, 0.6f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, (ImVec4)ImColor::HSV(0 / 7.0f, 0.7f, 0.7f));
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, (ImVec4)ImColor::HSV(0 / 7.0f, 0.8f, 0.8f));
+        if (ImGui::Button("Restart LUA")) {
+            OutputDebugStringA("Restart LUA\n");
+            restartLua();
         }
+        ImGui::PopStyleColor(3);
+        ImGui::PopID();
+        /*
+        if (ImGui::IsItemHovered()) {
+            ImGui::SetTooltip("Reload all LUA scripts from HD");
+        }
+        */
+        ImGui::SameLine();
+        ImGui::TextWrapped("Reload all LUA scripts from Hard Disk");
+    }
+
+    if (ImGui::BeginTabBar("Mods", 0))
+    {
+        if (ImGui::BeginTabItem("General"))
+        {
+            for (auto& [key, value] : UIElements) {
+                if (!strcmp(value.type().name(), "bool *")) {
+                    auto ref = std::any_cast<bool*>(value);
+                    ImGui::Checkbox(key.c_str(), ref);
+                }
+                else if (!strcmp(value.type().name(), "struct UISlider *")) {
+                    auto ref = std::any_cast<UISlider*>(value);
+                    ImGui::SliderInt(ref->label, &ref->v, ref->v_min, ref->v_max, ref->format, ref->flags);
+                }
+                else {
+                    OutputDebugStringA("Unknown type: ");
+                    OutputDebugStringA(value.type().name());
+                    OutputDebugStringA("\n");
+                }
+            }
+            ImGui::EndTabItem();
+        }
+        ImGui::EndTabBar();
+    }
+    
     ImGui::End();
 
     ImGui::Render();

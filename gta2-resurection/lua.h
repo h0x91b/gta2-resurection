@@ -8,6 +8,7 @@
 // lua examples https://pastebin.com/8f9UH56W
 
 void initLua();
+void restartLua();
 extern lua_State* L;
 void LeftMouse(bool isDown);
 void RightMouse(bool isDown);
