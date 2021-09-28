@@ -79,7 +79,9 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <CustomBuildStep>
-      <Command>copy /Y "$(ProjectDir)*.lua" "$(GTA2Folder)\scripts\"</Command>
+      <Command>copy /Y "$(ProjectDir)*.lua" "$(GTA2Folder)\scripts\"
+copy /Y "$(TargetPath)" "$(GTA2Folder)"
+</Command>
       <Outputs>non-existen-file</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
@@ -113,7 +115,9 @@
       <EnableUAC>false</EnableUAC>
     </Link>
     <CustomBuildStep>
-      <Command>copy /Y "$(ProjectDir)*.lua" "$(GTA2Folder)\scripts\"</Command>
+      <Command>copy /Y "$(ProjectDir)*.lua" "$(GTA2Folder)\scripts\"
+copy /Y "$(TargetPath)" "$(GTA2Folder)"
+</Command>
       <Outputs>non-existen-file</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>

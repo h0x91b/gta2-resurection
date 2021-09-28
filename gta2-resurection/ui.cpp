@@ -33,9 +33,11 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
     pBackBuffer->Release();
 }
 
-bool show_demo_window = true;
+bool show_demo_window = false;
+bool show_mods_window = true;
 
-UISettings settings = {TRUE};
+UISettings settings = {0};
+
 std::vector<std::pair<std::string, std::any>> UIElements;
 
 void renderUI() {
@@ -43,11 +45,12 @@ void renderUI() {
     ImGui_ImplWin32_NewFrame();
     ImGui::NewFrame();
 
-    if (show_demo_window)
-        ImGui::ShowDemoWindow(&show_demo_window);
+#ifdef _DEBUG
+    ImGui::ShowDemoWindow(&show_demo_window);
+#endif
 
     ImGui::SetNextWindowSize(ImVec2(300, 200), ImGuiCond_FirstUseEver);
-    ImGui::Begin("Settings", &settings.open, ImGuiWindowFlags_AlwaysAutoResize);
+    ImGui::Begin("Settings", &show_mods_window, ImGuiWindowFlags_AlwaysAutoResize);
 
     // Red reload button
     {
