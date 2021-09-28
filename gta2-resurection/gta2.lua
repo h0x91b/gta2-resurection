@@ -22,7 +22,7 @@ struct UISettings {
 ]]
 
 local API = {
-    IsLeftMouseDown = false
+    IsLeftMouseDown = false,
 }
 
 function API.test( abc )
@@ -126,3 +126,16 @@ function gameTick(dt)
     end
 end
 
+function setKeyState( keyState )
+	-- hook to control keys
+    -- print("setKeyState pre", keyState)
+    local modifiedKeyState = keyState
+    for i = 1, #loadedMods do
+        local mod = loadedMods[i]
+        if mod.setKeyState ~= nil then
+            modifiedKeyState = mod.setKeyState(modifiedKeyState, API)
+        end
+    end
+    -- print("setKeyState post", modifiedKeyState)
+    return modifiedKeyState
+end

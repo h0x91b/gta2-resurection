@@ -11,29 +11,35 @@
 
 #pragma comment(lib, "detours.lib")
 
+void luaError() {
+    const size_t S = 4096;
+    char buf[S];
+    sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
+
+    lua_Debug info;
+    int level = 0;
+    while (lua_getstack(L, level, &info)) {
+        lua_getinfo(L, "nSl", &info);
+        sprintf_s(buf, S, "  [%d] %s:%d -- %s [%s]\n",
+            level, info.short_src, info.currentline,
+            (info.name ? info.name : "<unknown>"), info.what);
+        ++level;
+    }
+    OutputDebugStringA(buf);
+}
+
 thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
     const size_t S = 4096;
     char buf[S];
 
     static DWORD lastTicks = GetTickCount();
     DWORD currentTicks = GetTickCount();
-    lua_getglobal(L, "gameTickPre");// получаем из lua функцию gameTick.
-    lua_pushnumber(L, (float)(currentTicks - lastTicks) / 1000);// отправляем в стек число.
-    auto x = lua_pcall(L, 1, 0, 0);// вызов функции, передаем 2 параметра, возвращаем 1.
+    lua_getglobal(L, "gameTickPre");
+    lua_pushnumber(L, (float)(currentTicks - lastTicks) / 1000);
+    auto x = lua_pcall(L, 1, 0, 0);
 
     if (x != LUA_OK) {
-        sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
-
-        lua_Debug info;
-        int level = 0;
-        while (lua_getstack(L, level, &info)) {
-            lua_getinfo(L, "nSl", &info);
-            sprintf_s(buf, S, "  [%d] %s:%d -- %s [%s]\n",
-                level, info.short_src, info.currentline,
-                (info.name ? info.name : "<unknown>"), info.what);
-            ++level;
-        }
-        OutputDebugStringA(buf);
+        luaError();
     }
 
     realGameTick(_this, _edx);
@@ -43,23 +49,34 @@ thisCallHook(GameTick, 0x0045c1f0, Game*, void) {
     x = lua_pcall(L, 1, 0, 0);
 
     if (x != LUA_OK) {
-        sprintf_s(buf, S, "Lua error: %s\n", lua_tostring(L, -1));
-
-        lua_Debug info;
-        int level = 0;
-        while (lua_getstack(L, level, &info)) {
-            lua_getinfo(L, "nSl", &info);
-            sprintf_s(buf, S, "  [%d] %s:%d -- %s [%s]\n",
-                level, info.short_src, info.currentline,
-                (info.name ? info.name : "<unknown>"), info.what);
-            ++level;
-        }
-        OutputDebugStringA(buf);
+        luaError();
     }
 
     lastTicks = currentTicks;
 }
 
+thisCallHook(SetKeyState, 0x004a4930, Player_S4*, void, uint keys) {
+    const size_t S = 4096;
+    char buf[S];
+    sprintf_s(buf, S, "SetKeyState(%08X)\n", keys);
+    OutputDebugStringA(buf);
+
+    lua_getglobal(L, "setKeyState");
+
+    lua_pushnumber(L, keys);
+    auto x = lua_pcall(L, 1, 1, 0);
+
+    if (x != LUA_OK) {
+        luaError();
+    }
+    else {
+        keys = lua_tonumber(L, -1);
+        sprintf_s(buf, S, "Modified SetKeyState(%08X)\n", keys);
+        OutputDebugStringA(buf);
+    }
+
+    realSetKeyState(_this, _edx, keys);
+}
 
 // 0x0044b2c0 - 7 bytes
 typedef void (__fastcall AddMoney)(void *_this, DWORD edx, int money);
@@ -116,6 +133,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     // DetourAttach(&(PVOID&)TrueSleep, TimedSleep);
     DetourAttach(&(PVOID&)fnWndProc, _wndProc);
     Attach(GameTick);
+    Attach(SetKeyState);
     DetourTransactionCommit();
 
     //printf("hwnd is found %X\n", hwnd);
@@ -138,6 +156,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     //DetourDetach(&(PVOID&)TrueSleep, TimedSleep);
     DetourDetach(&(PVOID&)fnWndProc, _wndProc);
     Dettach(GameTick);
+    Dettach(SetKeyState);
     DetourTransactionCommit();
    
     printf("Dettach and shutdown everything\n");

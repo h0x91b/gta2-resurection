@@ -34,17 +34,34 @@ function Mod.tickPre( dt, api )
 	print("mouseAngle", mouseAngle)
 	ped:setRotation(mouseAngle)
 
-	print("IsLeftMouseDown", api.IsLeftMouseDown)
-	if api.IsLeftMouseDown then
-		ped.obj.player.field_0x7c = 1
-		ped.obj.player.field_0x8d = prevAttack ~= 1
-		prevAttack = true
-	else
-		ped.obj.player.field_0x7c = 0
-		ped.obj.player.field_0x8d = prevAttack ~= 0
-		prevAttack = false
-	end
-	print("setted")
 end
+
+function bitand(a, b)
+    local result = 0
+    local bitval = 1
+    while a > 0 and b > 0 do
+      if a % 2 == 1 and b % 2 == 1 then -- test the rightmost bits
+          result = result + bitval      -- set the current bit
+      end
+      bitval = bitval * 2 -- shift left
+      a = math.floor(a/2) -- shift right
+      b = math.floor(b/2)
+    end
+    return result
+end
+
+function Mod.setKeyState( keys, api )
+	local ped = CPed:new(1)
+	if ped == nil or not getSetting("Mouse rotation") or ped.car ~= nil then
+        return keys
+    end
+	if api.IsLeftMouseDown then
+		if bitand(keys, 0x10) == 0 then
+			keys = keys + 0x10
+		end
+	end
+	return keys
+end
+
 
 return Mod
