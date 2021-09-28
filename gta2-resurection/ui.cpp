@@ -90,6 +90,10 @@ LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
         LeftMouse(true);
     } else if (msg == WM_LBUTTONUP) {
         LeftMouse(false);
+    } else if (msg == WM_RBUTTONDOWN) {
+        RightMouse(true);
+    } else if (msg == WM_RBUTTONUP) {
+        RightMouse(false);
     }
     return fnWndProc(window, msg, wParam, lParam);
 }

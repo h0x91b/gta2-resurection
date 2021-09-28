@@ -237,3 +237,9 @@ void LeftMouse(bool isDown) {
     lua_pushboolean(L, isDown);
     lua_setglobal(L, "IsLeftMouseDown");
 }
+
+void RightMouse(bool isDown) {
+    lua_pushboolean(L, isDown);
+    lua_setglobal(L, "IsRightMouseDown");
+}
+

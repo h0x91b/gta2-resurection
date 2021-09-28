@@ -60,6 +60,11 @@ function Mod.setKeyState( keys, api )
 			keys = keys + 0x10
 		end
 	end
+	if api.IsRightMouseDown then
+		if bitand(keys, 0x80) == 0 then
+			keys = keys + 0x80
+		end
+	end
 	return keys
 end
 

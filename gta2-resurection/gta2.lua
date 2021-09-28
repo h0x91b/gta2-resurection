@@ -79,6 +79,7 @@ print("Ready")
 function gameTickPre(dt)
     print("gameTickPre")
     API.IsLeftMouseDown = IsLeftMouseDown
+    API.IsRightMouseDown = IsRightMouseDown
 
     for i = 1, #loadedMods do
         local mod = loadedMods[i]
