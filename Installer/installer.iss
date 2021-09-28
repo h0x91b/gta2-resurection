@@ -26,6 +26,7 @@ Source: "gta2-resurected.exe"; DestDir: "{app}"
 Source: "lua51.dll"; DestDir: "{app}"
 Source: "DDraw.dll"; DestDir: "{app}"
 Source: "D3DImm.dll"; DestDir: "{app}"
+Source: "imgui.ini"; DestDir: "{app}"
 Source: "..\gta2-resurection\*.lua"; DestDir: "{app}\scripts"
 Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
 
