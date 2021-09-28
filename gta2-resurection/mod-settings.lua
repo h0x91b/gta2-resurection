@@ -13,6 +13,7 @@ function Mod.initMod( api )
 	addBooleanSetting("Show traffic lights info", false)
 	addBooleanSetting("Free shoping", false)
 	addBooleanSetting("Get flamethrower", false)
+	addBooleanSetting("Get SMG", false)
 end
 
 function Mod.tick( dt, api )
@@ -34,6 +35,12 @@ function Mod.tick( dt, api )
 		local pGame = ffi.cast('struct Game**', 0x005eb4fc)
 		local WEAPON_FLAMETHROWER = 8
 		pGame[0].player.weapons[WEAPON_FLAMETHROWER].ammo = 100
+	end
+
+	if getSetting("Get SMG") then
+		local pGame = ffi.cast('struct Game**', 0x005eb4fc)
+		local WEAPON_SMG = 1
+		pGame[0].player.weapons[WEAPON_SMG].ammo = 100
 	end
 end
 
