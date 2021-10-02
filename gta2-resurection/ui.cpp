@@ -120,6 +120,7 @@ void renderUI() {
     pDeviceContext->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
 
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+    ShowCursor(1);
 }
 
 LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {

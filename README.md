@@ -18,6 +18,10 @@ Install it into the `GTA2` folder
 
 Run the game using the desktop icon or by running `gta2-resurected.exe`
 
+# Notes
+
+Only windowed mode currently supported
+
 # Ghidra
 
 Ghidra project file: [gta2-resurected.exe.gzf](./gta2-resurected.exe.gzf)
