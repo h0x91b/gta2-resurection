@@ -42,7 +42,7 @@ end
 function CPed:getRotation()
     local rot = self.obj.pedS1.rotation
     local normalized = math.fmod((rot / 4 - 90), 360)
-    if normalized < 0 then
+    while normalized < 0 do
         normalized = normalized + 360
     end
 	return normalized,rot
