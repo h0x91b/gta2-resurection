@@ -28,12 +28,21 @@ Cheat engine table that I use on streams: [gta2-resurected.ct](./gta2-resurected
 
 # Building from source
 
+```
+git clone --recurse-submodules https://github.com/h0x91b/gta2-resurection.git
+```
+
+## Compile detours
+
+Open in `Visual studio developer command prompt` directory `deps\detours\` and run `nmake`
+
+## LuaJIT
+
+Open in `Visual studio developer command prompt` directory `deps\LuaJIT\src\` and run `msvcbuild`
+
+## Project itself
+
 Open in Visual studio 2019
-
-* Download and compile LuaJIT-2.0.5
-* Download and compile Detour-4.0.1
-
-Update include and library directories in project settings
 
 * Install GTA2 into `D:\games\gta2\`
 * Or go to `View->Other windows->Property manager` open `PropertySheet`, go to `User macros` and change `GTA2Folder` to correct path.

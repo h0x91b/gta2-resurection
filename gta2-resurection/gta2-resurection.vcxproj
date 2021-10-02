@@ -47,15 +47,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\Detours-4.0.1\include;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\Detours-4.0.1\lib.X86;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)deps\Detours\include;$(SolutionDir)deps\LuaJIT\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)deps\Detours\lib.X86;$(SolutionDir)deps\LuaJIT\src;$(LibraryPath)</LibraryPath>
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\Detours-4.0.1\include;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\Detours-4.0.1\lib.X86;$(SolutionDir)\..\LuaJIT-2.0.5\src;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)deps\Detours\include;$(SolutionDir)deps\LuaJIT\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)deps\Detours\lib.X86;$(SolutionDir)deps\LuaJIT\src;$(LibraryPath)</LibraryPath>
     <CustomBuildAfterTargets>
     </CustomBuildAfterTargets>
     <CustomBuildBeforeTargets>
@@ -81,7 +81,7 @@
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)*.lua" "$(GTA2Folder)\scripts\"
 copy /Y "$(TargetPath)" "$(GTA2Folder)"
-</Command>
+copy /Y "$(SolutionDir)deps\LuaJIT\src\lua51.dll" "$(GTA2Folder)"</Command>
       <Outputs>non-existen-file</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
@@ -117,7 +117,7 @@ copy /Y "$(TargetPath)" "$(GTA2Folder)"
     <CustomBuildStep>
       <Command>copy /Y "$(ProjectDir)*.lua" "$(GTA2Folder)\scripts\"
 copy /Y "$(TargetPath)" "$(GTA2Folder)"
-</Command>
+copy /Y "$(SolutionDir)deps\LuaJIT\src\lua51.dll" "$(GTA2Folder)"</Command>
       <Outputs>non-existen-file</Outputs>
     </CustomBuildStep>
     <PostBuildEvent>
