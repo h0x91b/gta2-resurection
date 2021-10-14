@@ -34,7 +34,10 @@ function Mod.tick( dt, api )
 		lastDiscordUpdate = 0.0
 		if ped.car == nil then
 			print("walking")
-			setDiscordStatus("Walking", "Just walking")
+			
+			local x = string.format("%.1f",ped.cameraX / 16384) 
+			local y = string.format("%.1f",ped.cameraY / 16384) 
+			setDiscordStatus("Walking", "Just walking" .. " " .. x .. "x" .. y)
 		else
 			print("driving")
 			local x = string.format("%.1f",ped.car.carSprite.x / 16384) 

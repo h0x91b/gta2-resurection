@@ -93,9 +93,8 @@ function Mod.setKeyState( keys, api )
 	if api.IsRightMouseDown then
 		if bitand(keys, 0x80) == 0 then
 			if getSetting("Fly on right click") then
-				ped.obj.player.field_0x78 = 1
+				ped.obj.player.forward = 1
 				ped.obj.field_0x258 = 0x23
-				ped.obj.field_0x25c = 0x23
 				PedJumpFly(ped.obj, 0)
 			else
 				keys = keys + 0x80
