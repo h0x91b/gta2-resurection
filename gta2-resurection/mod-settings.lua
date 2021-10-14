@@ -29,7 +29,8 @@ function Mod.tick( dt, api )
 	end
 
 	lastDiscordUpdate = lastDiscordUpdate + dt
-	if lastDiscordUpdate > 1.0 then
+	-- Sets a user's presence in Discord to a new activity. This has a rate limit of 5 updates per 20 seconds.
+	if lastDiscordUpdate > 4.0 then
 		lastDiscordUpdate = 0.0
 		if ped.car == nil then
 			print("walking")
