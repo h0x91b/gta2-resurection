@@ -208,6 +208,27 @@ int lGetCursorPos(lua_State* L) {
     return 4;
 };
 
+int lSetDiscordStatus(lua_State* L) {
+	int narg = lua_gettop(L);
+	if (narg != 2) {
+		// error
+		lua_pushliteral(L, "This function requires exactly 2 argument <State> <Details>");
+		return -1;  /* error flag */
+	}
+
+	auto state = lua_tostring(L, 1);
+	auto details = lua_tostring(L, 2);
+
+	discord::Activity activity{};
+	activity.SetState(state);
+	activity.SetDetails(details);
+	core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
+
+		});
+
+    return 0;
+};
+
 void initLua() {
     const size_t S = 4096;
     char buf[S];
@@ -223,6 +244,7 @@ void initLua() {
     lua_register(L, "addBooleanSetting", lAddBooleanSetting);
     lua_register(L, "addSliderSetting", lAddSliderSetting);
     lua_register(L, "getSetting", lGetSetting);
+    lua_register(L, "setDiscordStatus", lSetDiscordStatus);
     int x = luaL_dofile(L, "scripts\\gta2.lua"); // compile & execute file
 
     if (x != LUA_OK) {

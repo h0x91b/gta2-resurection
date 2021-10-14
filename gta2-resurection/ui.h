@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <string>
 #include <any>
+#include "discord/discord.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 extern WNDPROC fnWndProc;
@@ -19,6 +20,7 @@ void log(const char* fmt, ...);
 
 extern std::vector<std::pair<std::string, std::any>> UIElements;
 extern std::vector<std::string> _log;
+extern discord::Core* core;
 
 struct UISettings {
     bool open;

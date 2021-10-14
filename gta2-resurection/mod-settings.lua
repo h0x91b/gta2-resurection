@@ -20,11 +20,24 @@ function Mod.initMod( api )
 	addBooleanSetting("Get grenade", false)
 end
 
+local lastDiscordUpdate = 0.0
 function Mod.tick( dt, api )
     -- print("Mod.tick", dt, api)
 	local ped = CPed:new(1)
 	if ped == nil then
 		return 
+	end
+
+	lastDiscordUpdate = lastDiscordUpdate + dt
+	if lastDiscordUpdate > 1.0 then
+		lastDiscordUpdate = 0.0
+		if ped.car == nil then
+			print("walking")
+			setDiscordStatus("Walking", "Just walking")
+		else
+			print("driving")
+			setDiscordStatus("Driving", "Car id: " ..ped.car.id .. " type: " .. tonumber(ped.car.type))
+		end
 	end
 
 	ffi.cast('bool*', 0x005eada7)[0] = getSetting("Show cycles")

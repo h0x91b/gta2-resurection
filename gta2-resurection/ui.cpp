@@ -5,6 +5,10 @@
 #include "gta-helper.h"
 #include "lua.h"
 
+#pragma comment(lib, "discord_game_sdk.dll.lib")
+
+discord::Core* core{};
+
 ID3D11DeviceContext* pDeviceContext;
 ID3D11RenderTargetView* mainRenderTargetView;
 WNDPROC fnWndProc = (WNDPROC)0x004d0a00;
@@ -31,6 +35,14 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
     pSwapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
     pDevice->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
     pBackBuffer->Release();
+
+	auto result = discord::Core::Create(898242996468871178, DiscordCreateFlags_Default, &core);
+	discord::Activity activity{};
+	activity.SetState("In main menu");
+	//activity.SetDetails("Fruit Loops");
+	core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
+
+		});
 }
 
 bool show_demo_window = false;
@@ -147,6 +159,8 @@ LRESULT CALLBACK _wndProc(HWND window, UINT msg, WPARAM wParam, LPARAM lParam) {
     } else if (msg == WM_RBUTTONUP) {
         RightMouse(false);
     }
+
+    core->RunCallbacks();
     return fnWndProc(window, msg, wParam, lParam);
 }
 
