@@ -1,10 +1,12 @@
 local inspect = require 'inspect'
 local CPed = require 'cped'
+local ffi = require 'ffi'
 
 local Mod = {}
 
 function Mod.initMod( api )
 	addBooleanSetting("Mouse rotation", true)
+	addBooleanSetting("Fly on right click", true)
 end
 
 local prevAttack = false
@@ -12,6 +14,7 @@ local prevAttack = false
 local rotateLeft = false
 local rotateRight = false
 
+local PedJumpFly = ffi.cast('PedJumpFly', 0x00433c40)
 function Mod.tickPre( dt, api )
     -- print("Mod.tick", dt, api)
 	local ped = CPed:new(1)
@@ -78,6 +81,10 @@ function Mod.setKeyState( keys, api )
 	if ped == nil or not getSetting("Mouse rotation") or ped.car ~= nil then
         return keys
     end
+	-- ped trying to enter car
+	if ped.targetCar1 ~= nil then
+		return keys
+	end
 	if api.IsLeftMouseDown then
 		if bitand(keys, 0x10) == 0 then
 			keys = keys + 0x10
@@ -85,7 +92,14 @@ function Mod.setKeyState( keys, api )
 	end
 	if api.IsRightMouseDown then
 		if bitand(keys, 0x80) == 0 then
-			keys = keys + 0x80
+			if getSetting("Fly on right click") then
+				ped.obj.player.field_0x78 = 1
+				ped.obj.field_0x258 = 0x23
+				ped.obj.field_0x25c = 0x23
+				PedJumpFly(ped.obj, 0)
+			else
+				keys = keys + 0x80
+			end			
 		end
 	end
 	if rotateLeft then

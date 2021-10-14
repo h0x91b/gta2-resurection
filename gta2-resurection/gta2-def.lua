@@ -878,8 +878,8 @@ struct Ped {
     undefined4 field_0x144;
     undefined4 field_0x148;
     undefined4 field_0x14c;
-    undefined4 field_0x150;
-    undefined4 field_0x154;
+    struct Car * targetCar1;
+    struct Car * targetCar2;
     undefined4 field_0x158;
     struct Player_S4 * player;
     struct Ped * nextPed;
@@ -5046,5 +5046,6 @@ typedef enum WEAPON {
 
 
 typedef Ped* (__stdcall *GetPedById)(int);
+typedef void (__fastcall *PedJumpFly)(Ped*, dword); // 0x00433c40
 ]]
 
