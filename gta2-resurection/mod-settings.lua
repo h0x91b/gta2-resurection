@@ -37,7 +37,9 @@ function Mod.tick( dt, api )
 			setDiscordStatus("Walking", "Just walking")
 		else
 			print("driving")
-			setDiscordStatus("Driving", "Car id: " ..ped.car.id .. " type: " .. tonumber(ped.car.type))
+			local x = string.format("%.1f",ped.car.carSprite.x / 16384) 
+			local y = string.format("%.1f",ped.car.carSprite.y / 16384) 
+			setDiscordStatus("Driving", "Car type: " .. tonumber(ped.car.type) .. " " .. x .. "x" .. y)
 		end
 	end
 

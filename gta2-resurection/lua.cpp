@@ -261,7 +261,6 @@ void initLua() {
             ++level;
             OutputDebugStringA(buf);
         }
-
     }
     else {
         sprintf_s(buf, S, "Lua was ok\n");
