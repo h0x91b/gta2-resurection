@@ -1,4 +1,5 @@
 package.path = './scripts/?.lua;' .. package.path
+package.cpath = './scripts/?.dll;' .. package.cpath
 
 local ffi = require("ffi")
 local inspect = require 'inspect'

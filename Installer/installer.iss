@@ -24,6 +24,7 @@ Source: "dgVoodooCpl.exe"; DestDir: "{app}"
 Source: "dgVoodoo.conf"; DestDir: "{app}"
 Source: "gta2-resurected.exe"; DestDir: "{app}"
 Source: "*.dll"; DestDir: "{app}"
+Source: "clua\*.dll"; DestDir: "{app}\scripts"
 Source: "imgui.ini"; DestDir: "{app}"
 Source: "..\gta2-resurection\*.lua"; DestDir: "{app}\scripts"
 Source: "Readme.txt"; DestDir: "{app}"; Flags: isreadme
@@ -34,7 +35,7 @@ Name: "{userdesktop}\GTA 2 Resurected"; Filename: "{app}\gta2-resurected.exe"; \
 
 [Registry]
 
-Root: HKCU; Subkey: "Software\DMA Design Ltd\GTA2\screen"; ValueType: dword; ValueName: "start_mode"; ValueData: "$1"; 
+Root: HKCU; Subkey: "Software\DMA Design Ltd\GTA2\screen"; ValueType: dword; ValueName: "start_mode"; ValueData: "$0"; 
 
 [Code]
 
