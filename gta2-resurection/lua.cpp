@@ -219,12 +219,14 @@ int lSetDiscordStatus(lua_State* L) {
 	auto state = lua_tostring(L, 1);
 	auto details = lua_tostring(L, 2);
 
+    /*
 	discord::Activity activity{};
 	activity.SetState(state);
 	activity.SetDetails(details);
 	core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
 
 		});
+    */
 
     return 0;
 };

@@ -90,9 +90,9 @@ void __fastcall addMoney(void* _this, DWORD _edx, int money) {
 DWORD WINAPI MainThread(HMODULE hModule) {
     OutputDebugString(L"MainThread");
 
-    //AllocConsole();
-    //FILE* fDummy;
-    //freopen_s(&fDummy, "CONOUT$", "w", stdout);
+    AllocConsole();
+    FILE* fDummy;
+    freopen_s(&fDummy, "CONOUT$", "w", stdout);
     printf("Console window activated, press HOME to activate detour\n");
 
     Sleep(1000);

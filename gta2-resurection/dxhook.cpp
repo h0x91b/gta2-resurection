@@ -64,10 +64,25 @@ bool HookD3D()
     sd.SampleDesc.Count = 1;
     sd.SampleDesc.Quality = 0;
     trace;
-    HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_REFERENCE, nullptr, 0, nullptr, 0, D3D11_SDK_VERSION, &sd, &pSwapchain, &pDevice, &featLevel, nullptr);
-    trace;
-    if (FAILED(hr))
+    HRESULT hr = D3D11CreateDeviceAndSwapChain(
+        nullptr, 
+        D3D_DRIVER_TYPE_HARDWARE, //D3D_DRIVER_TYPE_REFERENCE, 
+        nullptr, 
+        0, 
+        nullptr, 
+        0, 
+        D3D11_SDK_VERSION, 
+        &sd, 
+        &pSwapchain, 
+        &pDevice, 
+        &featLevel, 
+        nullptr
+    );
+    printf("D3D11CreateDeviceAndSwapChain return HR %08X\n", hr);
+    if (FAILED(hr)) {
+        trace;
         return false;
+    }
     trace;
     // Get swapchain vmt
     void** pVMT = *(void***)pSwapchain;

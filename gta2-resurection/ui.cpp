@@ -36,6 +36,7 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
     pDevice->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
     pBackBuffer->Release();
 
+    /*
 	auto result = discord::Core::Create(898242996468871178, DiscordCreateFlags_Default, &core);
 	discord::Activity activity{};
 	activity.SetState("In main menu");
@@ -43,6 +44,7 @@ void initUI(IDXGISwapChain* pSwapchain, ID3D11Device* pDevice, ID3D11DeviceConte
 	core->ActivityManager().UpdateActivity(activity, [](discord::Result result) {
 
 		});
+    */
 }
 
 bool show_demo_window = false;

@@ -35,7 +35,7 @@ Name: "{userdesktop}\GTA 2 Resurected"; Filename: "{app}\gta2-resurected.exe"; \
 
 [Registry]
 
-Root: HKCU; Subkey: "Software\DMA Design Ltd\GTA2\screen"; ValueType: dword; ValueName: "start_mode"; ValueData: "$0"; 
+Root: HKCU; Subkey: "Software\DMA Design Ltd\GTA2\screen"; ValueType: dword; ValueName: "start_mode"; ValueData: "$1"; 
 
 [Code]
 
